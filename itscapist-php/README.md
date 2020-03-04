@@ -1,78 +1,384 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+<p align="center"><img src="http://www.iut-lens.univ-artois.fr/wp-content/themes/iutlens2016new2/images/screenshot.png" width="100"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
 
-## About Laravel
+## Présentation de ce projet
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Version API de l'application taches que nous avons utilisé pendant les séances de TP du module Pweb-1.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Rappels sur le système d'information utilisé
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+*   Une tâche est caractérisée par 
 
-## Learning Laravel
+    -   Une date d'expiration
+    -   Une catégorie
+    -   Une description
+    -   Un boolean accomplie
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+*   Une personne est caractérisée par 
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    -   Un nom
+    -   Un prénom
+    -   Une spécialité
+    -   Un avatar
+    -   Un CV
+    -   un booléen qui indique si la personne est active ou non
 
-## Laravel Sponsors
+*   Un suivi d'activité est caractérisé par 
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+    -   Un titre
+    -   Un commentaire
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+*   Un `User` est la classe proposée par `Laravel` pour mettre en oeuvre l'identification.
 
-## Contributing
+* Quelques explications sur les relations entre classes :
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    -   Une tâche est accomplie par plusieurs personnes.
+    -   Un suivi d'exécution est associé à une tâche et une tâche peut faire l'objet de plusieurs suivis d'exécution
+    -   Une personne peut se connecté si un enregistrement dans la table user est associé avec la personne
+    -   Un suivi d'exécution est créé par une personne
 
-## Code of Conduct
+![Le modèle de données][modele]
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### La création du système d'information
 
-## Security Vulnerabilities
+Pour créer le système d'information, nous allons utiliser le mécanisme de migration proposé par `Laravel`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Pour cela nous devons créer :
 
-## License
+1.  Les fichiers de migration dans le répertoire `database/migrations`.
+1.  Les fichiers de fabrication des enregistrements de chaque table dans le répertoire `database/factories`.
+1.  Les fichiers d'insertion des données dans chaque table dans le répertoire `database/seeds`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Pour faire le lien entre notre application et le système de gestion de base de données, il faut modifier le fichier `.env` 
+en indiquant les bonnes valeurs aux variables suivantes :
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nomDeLaBase
+DB_USERNAME=NomDeUser
+DB_PASSWORD=MDP
+```
+
+Il faut ensuite exécuter les commandes suivantes :
+
+```bash
+php artisan migrate:fresh
+php artisan db:seed   
+```
+
+## Modification pour stockage des images 
+
+1.  Création du lien pour accès au répertoire public
+
+    ```bash
+    php artisan storage:link
+    ```
+    
+1.  Modification du lieu de stockage par défaut dans le fichier `config/filesystem.php`
+    Ici on remplace `local` avec `public` pour pouvoir stocker les avatars.
+
+    ```php
+    'default' => env('FILESYSTEM_DRIVER', 'public'),
+    ```
+        
+
+## Mise en oeuvre de l'authentification
+
+Nous allons utiliser un package supplémentaire : [`tymon/jwt-auth`](https://github.com/tymondesigns/jwt-auth/tree/develop).
+
+Pour configurer notre application Laravel, nous allons suivre le tutoriel [Laravel 6 Rest API using JWT Authentication](https://www.larashout.com/laravel-6-jwt-authentication).
+
+1.  Installation de `tymon/jwt-auth`
+
+    ```bash
+    composer require tymon/jwt-auth:dev-develop --prefer-source
+    ```
+    
+1.  Choix du provider
+
+    ```bash
+     php artisan vendor:publish
+    
+     Which provider or tag's files would you like to publish?:
+      [0 ] Publish files from all providers and tags listed below
+      [1 ] Provider: Facade\Ignition\IgnitionServiceProvider
+      [2 ] Provider: Fideloper\Proxy\TrustedProxyServiceProvider
+      [3 ] Provider: Illuminate\Foundation\Providers\FoundationServiceProvider
+      [4 ] Provider: Illuminate\Mail\MailServiceProvider
+      [5 ] Provider: Illuminate\Notifications\NotificationServiceProvider
+      [6 ] Provider: Illuminate\Pagination\PaginationServiceProvider
+      [7 ] Provider: Laravel\Tinker\TinkerServiceProvider
+      [8 ] Provider: Tymon\JWTAuth\Providers\LaravelServiceProvider
+      [9 ] Tag: config
+      [10] Tag: flare-config
+      [11] Tag: ignition-config
+      [12] Tag: laravel-errors
+      [13] Tag: laravel-mail
+      [14] Tag: laravel-notifications
+      [15] Tag: laravel-pagination
+     > 8
+    
+    Copied File [/vendor/tymon/jwt-auth/config/config.php] To [/config/jwt.php]
+    Publishing complete.
+    Publishing complete.
+    ```     
+
+1.  Génération du secret
+
+    ```bash
+     php artisan jwt:secret
+    ```
+    
+1.  Modification de la classe User pour identification par token.
+
+    ```php
+    <?php
+    
+    namespace App;
+    
+    use Illuminate\Contracts\Auth\MustVerifyEmail;
+    use Illuminate\Foundation\Auth\User as Authenticatable;
+    use Illuminate\Notifications\Notifiable;
+    use Tymon\JWTAuth\Contracts\JWTSubject;
+    
+    class User extends Authenticatable implements JWTSubject {
+        use Notifiable;
+    
+        /**
+         * The attributes that are mass assignable.
+         *
+         * @var array
+         */
+        protected $fillable = [
+            'name', 'email', 'password',
+        ];
+    
+        /**
+         * The attributes that should be hidden for arrays.
+         *
+         * @var array
+         */
+        protected $hidden = [
+            'password', 'remember_token',
+        ];
+    
+        /**
+         * The attributes that should be cast to native types.
+         *
+         * @var array
+         */
+        protected $casts = [
+            'email_verified_at' => 'datetime',
+        ];
+    
+        /**
+         * Get the identifier that will be stored in the subject claim of the JWT.
+         *
+         * @return mixed
+         */
+        public function getJWTIdentifier() {
+            return $this->getKey();
+        }
+    
+        /**
+         * Return a key value array, containing any custom claims to be added to the JWT.
+         *
+         * @return array
+         */
+        public function getJWTCustomClaims() {
+            return [];
+        }
+    }
+    ```
+    
+1.  Mofigication de la méthode d'authentification dans le fichier `config/auth.php`
+
+    ```
+    ...
+    'defaults' => [
+         'guard' => 'api',
+         'passwords' => 'users',
+    ],
+       
+    'guards' => [
+         'web' => [
+             'driver' => 'session',
+             'provider' => 'users',
+         ],
+     
+         'api' => [
+             'driver' => 'token',
+             'provider' => 'users',
+         ],
+    ],
+    ...
+    ```
+
+1.  Création d'un contrôleur d'authentification 
+
+    ````bash
+    php artisan make:controller Api\\AuthController
+    ````
+    qui crée un fichier `app/Http/Controllers/Api/authController`. Modifier le code avec le contenu suivant :
+    
+    ````php
+    <?php
+    
+    namespace App\Http\Controllers\Api;
+    
+    use JWTAuth;
+    use App\Http\Controllers\Controller;
+    use Illuminate\Http\Request;
+    use Tymon\JWTAuth\Exceptions\JWTException;
+    
+    class AuthController extends Controller
+    {
+        /**
+         * @var bool
+         */
+        public $loginAfterSignUp = true;
+    
+        /**
+         * @param Request $request
+         * @return \Illuminate\Http\JsonResponse
+         */
+        public function login(Request $request)
+        {
+            $input = $request->only('email', 'password');
+            $token = null;
+    
+            if (!$token = JWTAuth::attempt($input)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid Email or Password',
+                ], 401);
+            }
+    
+            return response()->json([
+                'success' => true,
+                'token' => $token,
+            ]);
+        }
+    
+        /**
+         * @param Request $request
+         * @return \Illuminate\Http\JsonResponse
+         * @throws \Illuminate\Validation\ValidationException
+         */
+        public function logout(Request $request)
+        {
+            $this->validate($request, [
+                'token' => 'required'
+            ]);
+    
+            try {
+                JWTAuth::invalidate($request->token);
+    
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User logged out successfully'
+                ]);
+            } catch (JWTException $exception) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry, the user cannot be logged out'
+                ], 500);
+            }
+        }
+    
+        /**
+         * @param RegistrationFormRequest $request
+         * @return \Illuminate\Http\JsonResponse
+         */
+    /*    public function register(RegistrationFormRequest $request)
+        {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+            $user->save();
+    
+            if ($this->loginAfterSignUp) {
+                return $this->login($request);
+            }
+    
+            return response()->json([
+                'success'   =>  true,
+                'data'      =>  $user
+            ], 200);
+        }*/
+     
+       /**
+        * Get the token array structure.
+        *
+        * @param  string $token
+        *
+        * @return \Illuminate\Http\JsonResponse
+        */
+       protected function respondWithToken($token)
+       {
+           return response()->json([
+               'access_token' => $token,
+               'token_type' => 'bearer',
+               'expires_in' => auth()->factory()->getTTL() * 60
+           ]);
+       }
+    }
+    ````
+    
+1.  Ajouter un contrôleur pour les personnes et les users associés.
+
+    ````bash
+    php artisan make:controller Api\\PersonneController
+    ````    
+    
+    qui crée un fichier `app/Http/Controllers/Api/PersonneController`. Modifier le code avec le contenu suivant :
+    
+     
+1.  Modification du fichier `routes/api.php`    
+
+    ````php
+    <?php
+     
+    use Illuminate\Http\Request;
+     
+    /*
+    |--------------------------------------------------------------------------
+    | API Routes
+    |--------------------------------------------------------------------------
+    |
+    | Here is where you can register API routes for your application. These
+    | routes are loaded by the RouteServiceProvider within a group which
+    | is assigned the "api" middleware group. Enjoy building your API!
+    |
+    */
+     
+    Route::middleware('auth:api')->get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::post('login', 'Api\AuthController@login');
+    Route::post('register', 'Api\PersonneController@store');
+    
+    Route::post('personnes', 'Api\PersonneController@store');
+    
+    Route::group(['middleware' => 'auth.jwt'], function () {
+        Route::post('logout', 'Api\AuthController@logout');
+        Route::get('me', 'Api\AuthController@me');
+        Route::post('refresh', 'Api\AuthController@refresh');
+        Route::get('personnes', 'Api\PersonneController@index');
+        Route::get('personnes/{id}', 'Api\PersonneController@show');
+        Route::put('personnes/{id}', 'Api\PersonneController@update');
+        Route::delete('personnes/{id}', 'Api\PersonneController@destroy');
+    });
+    ````    
+### Gestion des permissions et des rôles
+
+Installation d'un paquetage qui gère les permissions et les rôles : [Laravel-permission](https://github.com/spatie/laravel-permission).
+
+Pour l'installation on pourra se référer à la [documentation](https://docs.spatie.be/laravel-permission/v3/introduction/), et à un article de présentation 
+    
+---
+[modele]: docs/images/modele.png  "Figure 1. Le modèle de données" {#modele  .centre height="300px" }
+
