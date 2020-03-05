@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Modeles\Save;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,5 +50,9 @@ class User extends Authenticatable implements JWTSubject {
      */
     public function getJWTCustomClaims() {
         return [];
+    }
+
+    public function getSave() {
+        return $this->belongsTo(Save::class)->get();
     }
 }
