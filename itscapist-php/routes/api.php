@@ -26,4 +26,6 @@ Route::group(['middleware' => 'auth.jwt'], function () {
     Route::post('refresh', 'Api\AuthController@refresh');
 
     Route::get('save', 'Api\SaveController@get');
+    Route::post('save', 'Api\SaveController@store');
+    Route::delete('save', 'Api\SaveController@delete');
 });
