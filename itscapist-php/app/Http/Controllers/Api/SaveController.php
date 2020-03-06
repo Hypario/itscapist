@@ -18,12 +18,14 @@ class SaveController extends Controller
     public function get()
     {
         $user = JWTAuth::user();
+        $save = null;
 
-        /** @var Collection $saves */
-        $saves = $user->getSave();
+        if ($user->save_id) {
+            $save = Save::find($user->save_id)->toJson();
+        }
 
         return response()->json([
-            "save" => $saves->has(0) ?: null
+            "save" => $save
         ]);
     }
 
