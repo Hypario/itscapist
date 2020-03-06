@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Modeles\Save;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use JWTAuth;
 
 class SaveController extends Controller
@@ -20,8 +17,8 @@ class SaveController extends Controller
         $user = JWTAuth::user();
         $save = null;
 
-        if ($user->save_id) {
-            $save = Save::find($user->save_id)->toJson();
+        if ($save = $user->getSave()->get()->get(0)) {
+            $save = $save->toJson();
         }
 
         return response()->json([
@@ -44,17 +41,7 @@ class SaveController extends Controller
 
         $user = JWTAuth::user();
 
-        if ($user->save_id) {
-            /** @var Model $save */
-            $save = Save::find($user->save_id);
-            $save->update($validated);
-        } else {
-            $save = new Save($validated);
-            $save->save();
-
-            $user->save_id = $save->id;
-            $user->save();
-        }
+        $user->getSave()->updateOrCreate([], $validated);
 
         return response()->json([
             "messsage" => "Sucessfully saved",
@@ -70,8 +57,7 @@ class SaveController extends Controller
     {
         $user = JWTAuth::user();
 
-        $save = Save::find($user->save_id);
-        $save->delete();
+        $user->getSave()->delete();
 
         return response()->json([
             "message" => "Sucessfully deleted",

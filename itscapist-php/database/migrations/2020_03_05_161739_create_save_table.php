@@ -18,6 +18,9 @@ class CreateSaveTable extends Migration
             $table->integer('map_id');
             $table->json("inventory");
             $table->integer('health');
+
+            $table->integer('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

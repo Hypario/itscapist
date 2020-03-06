@@ -53,6 +53,6 @@ class User extends Authenticatable implements JWTSubject {
     }
 
     public function getSave() {
-        return $this->belongsTo(Save::class)->get();
+        return $this->hasOne(Save::class);
     }
 }
