@@ -9,6 +9,10 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class RegisterComponent implements OnInit {
 
   form: FormGroup;
+  apiResponse: {
+    success: boolean | null,
+    message: string
+  };
 
   constructor() {
   }
@@ -18,13 +22,15 @@ export class RegisterComponent implements OnInit {
     data.append('username', this.form.get('username').value);
     data.append('password', this.form.get('password').value);
     data.append('password_confirmation', this.form.get('password_confirmation').value);
-    fetch('localhost:8000/register', {
+    fetch('localhost:8000/api/register', {
       method: 'POST',
       body: data
     }).then((response) => {
       return response.json();
     }).then((json) => {
-      console.log(json);
+      if (!json.success) {
+        this.apiResponse = json;
+      }
     });
   }
 

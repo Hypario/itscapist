@@ -1,3 +1,11 @@
+<div *ngIf="apiResponse && !apiResponse.success" fxLayoutAlign="center center">
+  <mat-card fxFlex="50" class="danger white-text">
+    <mat-card-content fxLayout="column" fxLayoutAlign="center">
+      {{ apiResponse.message }}
+    </mat-card-content>
+  </mat-card>
+</div>
+
 <div fxLayoutAlign="center center">
   <mat-card fxFlex="50">
     <mat-card-content fxLayout="column" fxLayoutAlign="center">
@@ -9,7 +17,7 @@
             <div *ngIf="username?.errors.required">Le nom d'utilisateur est obligatoire</div>
           </div>
         </mat-form-field>
-        
+
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
           <input matInput formControlName="password">
@@ -17,10 +25,10 @@
             <div *ngIf="password?.errors.required">Le mot de passe est obligatoire</div>
           </div>
         </mat-form-field>
-        
+
         <button type="submit" [disabled]="form.invalid" mat-stroked-button mat-raised-button color="accent">Se connecter</button>
       </form>
     </mat-card-content>
   </mat-card>
-  
+
 </div>
