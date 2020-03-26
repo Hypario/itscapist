@@ -6,14 +6,28 @@ export interface JWT {
   connected: boolean;
 }
 
+const domain = 'http://localhost:8000/api';
+
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class ApiService {
+
+  constructor() {
+  }
 
   jwt: JWT = {token: '', token_type: '', connected: false};
 
-  constructor() {
+  send(method: string, url: string, body = null, headers = {}) {
+    return fetch(domain + url, {
+      method,
+      headers,
+      body
+    });
+  }
+
+  sendWithToken(method: string, url: string, body = null) {
+    return this.send(method, url, body, {Authorization: this.jwt.token_type + ' ' + this.jwt.token});
   }
 
   setToken(token: string, type: string) {

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
-import {AuthService} from '../auth/auth.service';
+import {ApiService} from '../api/api.service';
 
 @Component({
   selector: 'app-login',
@@ -17,26 +17,24 @@ export class LoginComponent implements OnInit {
     message: string
   };
 
-  constructor(private snackBar: MatSnackBar, private router: Router, private auth: AuthService) {
+  constructor(private snackBar: MatSnackBar, private router: Router, private api: ApiService) {
   }
 
   onSubmit() {
     const data = new FormData();
     data.append('email', this.form.get('email').value);
     data.append('password', this.form.get('password').value);
-    fetch('http://localhost:8000/api/login', {
-      method: 'POST',
-      body: data
-    }).then((response) => {
-      return response.json();
-    }).then((json) => {
+    this.api.send('POST', '/login', data)
+      .then((response) => {
+        return response.json();
+      }).then((json) => {
       if (!json.success) {
         this.apiResponse = json;
       } else {
         this.snackBar.open('Vous êtes maintenant connecté.', '', {
           duration: 5 * 1000
         });
-        this.auth.setToken(json.access_token, json.token_type);
+        this.api.setToken(json.access_token, json.token_type);
         this.router.navigateByUrl('/');
       }
     });

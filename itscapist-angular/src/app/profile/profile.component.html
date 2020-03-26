@@ -1,40 +1,39 @@
 <div fxLayoutAlign="center center">
-    <mat-card fxFlex="50">
-        <mat-card-content fxLayout="column" fxLayoutAlign="center">
-            <h3>Profil de {{ apiResponse.name }}</h3>
-            <p> Votre temps de jeu : <b>{{ userdata.temps }}</b><br>
-                Salle actuelle : <b>{{ userdata.salle }}</b><br>
-                Nombre de points : <b>{{ userdata.points }}</b>
-            </p>
-            <button mat-raised-button color="accent" (click) = togglePasswd()>Changer votre mot de passe</button>
-
-            <div [hidden]="isShown">
-                <form [formGroup]="changePwd">
-                    <mat-form-field>
-                      <mat-label>Mot de passe actuel</mat-label>
-                      <input matInput placeholder="Votre actuel mot de passe" type="password" formControlName="actpwd">
-                    </mat-form-field>
-                  <br>
-                    <mat-form-field>
-                        <mat-label>Nouveau mot de passe</mat-label>
-                        <input matInput placeholder="Votre nouveau mot de passe" type="password" formControlName="newpwd">
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field>
-                        <mat-label>Répeter votre mot de passe</mat-label>
-                        <input matInput placeholder="Répeter le nouveau mot de passe" value="" type="password" formControlName="newpwdconf">
-                    </mat-form-field>
-                    <br>
-                    <button mat-raised-button color="warn">Changer le mot de passe</button>
-                  </form>
-            </div>
-
-
-
-            <p>
-                Date d'inscription : <b> {{ apiResponse.created_at }}</b>
-            </p>
-        </mat-card-content>
-    </mat-card>
+  <mat-card fxFlex="50">
+    <mat-card-content fxLayout="column" fxLayoutAlign="center">
+      <h3>Profil de {{ apiResponse.name }}</h3>
+      <p> Votre temps de jeu : <b>{{ userdata.temps }}</b><br>
+        Salle actuelle : <b>{{ userdata.salle }}</b><br>
+        Nombre de points : <b>{{ userdata.points }}</b>
+      </p>
+      <button mat-raised-button color="accent" (click)=togglePasswd()>Changer votre mot de passe</button>
+      
+      <div [hidden]="isShown">
+        <form [formGroup]="changePwd" (ngSubmit)="onSubmit()">
+          <mat-form-field>
+            <mat-label>Mot de passe actuel</mat-label>
+            <input matInput placeholder="Votre actuel mot de passe" type="password" formControlName="actpwd">
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <mat-label>Nouveau mot de passe</mat-label>
+            <input matInput placeholder="Votre nouveau mot de passe" type="password" formControlName="newpwd">
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <mat-label>Répeter votre mot de passe</mat-label>
+            <input matInput placeholder="Répeter le nouveau mot de passe" value="" type="password"
+                   formControlName="newpwdconf">
+          </mat-form-field>
+          <br>
+          <button mat-raised-button color="warn">Changer le mot de passe</button>
+        </form>
+      </div>
+      
+      <p>
+        Date d'inscription : <b> {{ apiResponse.created_at }}</b>
+      </p>
+    </mat-card-content>
+  </mat-card>
 
 </div>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AuthService, JWT} from './auth/auth.service';
+import {ApiService, JWT} from './api/api.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent {
 
   jwt: JWT = this.auth.jwt;
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: ApiService) {
   }
 
 }
