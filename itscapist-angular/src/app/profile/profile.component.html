@@ -9,21 +9,32 @@
       <button mat-raised-button color="accent" (click)=togglePasswd()>Changer votre mot de passe</button>
       
       <div [hidden]="isShown">
-        <form [formGroup]="changePwd" (ngSubmit)="onSubmit()">
+        <form [formGroup]="changePwd" fxLayout="column" (ngSubmit)="onSubmit()" fxLayoutAlign="stretch">
           <mat-form-field>
             <mat-label>Mot de passe actuel</mat-label>
             <input matInput placeholder="Votre actuel mot de passe" type="password" formControlName="actpwd">
+            <div *ngIf="actpwd.invalid && (actpwd.dirty || actpwd.touched)" class="mat-error">
+              <div *ngIf="actpwd?.errors.required">Vous devez entrer votre ancien mot de passe</div>
+            </div>
           </mat-form-field>
           <br>
           <mat-form-field>
             <mat-label>Nouveau mot de passe</mat-label>
             <input matInput placeholder="Votre nouveau mot de passe" type="password" formControlName="newpwd">
+            <div *ngIf="newpwd.invalid && (newpwd.dirty || newpwd.touched)" class="mat-error">
+              <div *ngIf="newpwd?.errors.required">Le mot de passe est obligatoire</div>
+              <div *ngIf="newpwd?.errors.minlength">Le mot de passe doit au moins faire 8 caractères</div>
+            </div>
           </mat-form-field>
           <br>
           <mat-form-field>
             <mat-label>Répeter votre mot de passe</mat-label>
             <input matInput placeholder="Répeter le nouveau mot de passe" value="" type="password"
                    formControlName="newpwdconf">
+              <div *ngIf="newpwdconf.invalid && (newpwdconf.dirty || newpwdconf.touched)" class="mat-error">
+                <div *ngIf="newpwdconf?.errors.required">Vous devez entrer une deuxième fois votre nouveau mot de passe</div>
+                <div *ngIf="newpwdconf?.errors.minlength">Le mot de passe doit au moins faire 8 caractères</div>
+              </div>
           </mat-form-field>
           <br>
           <button mat-raised-button color="warn">Changer le mot de passe</button>
@@ -33,6 +44,7 @@
       <p>
         Date d'inscription : <b> {{ apiResponse.created_at }}</b>
       </p>
+      <h3>D'autres informations seront prochainement disponibles ici aussi 😉</h3>
     </mat-card-content>
   </mat-card>
 
