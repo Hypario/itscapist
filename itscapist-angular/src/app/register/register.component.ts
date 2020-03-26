@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,7 @@ export class RegisterComponent implements OnInit {
     message: string
   };
 
-  constructor() {
+  constructor(private snackBar: MatSnackBar) {
   }
 
   onSubmit() {
@@ -27,7 +28,7 @@ export class RegisterComponent implements OnInit {
       method: 'POST',
       body: data
     }).then((response) => {
-      console.log(response)
+      console.log(response);
       return response.json();
     }).then((json) => {
       if (!json.success) {
@@ -35,6 +36,8 @@ export class RegisterComponent implements OnInit {
       } else {
         console.log(json);
       }
+    }).catch(() => {
+      this.snackBar.open('erreur', 'dismiss');
     });
   }
 
