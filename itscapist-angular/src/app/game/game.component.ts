@@ -15,7 +15,7 @@ export class GameComponent implements OnInit {
   constructor(private mainScene: GameService) {
     this.config = {
       type: Phaser.AUTO,
-      scene: [],
+      scene: [mainScene],
       scale: {
         mode: Phaser.Scale.FIT,
         parent: 'gameContainer',

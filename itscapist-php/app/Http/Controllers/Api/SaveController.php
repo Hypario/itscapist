@@ -45,7 +45,7 @@ class SaveController extends Controller
 
         return response()->json([
             "messsage" => "Sucessfully saved",
-            "errors" => null
+            "success" => true
         ]);
     }
 
@@ -61,7 +61,7 @@ class SaveController extends Controller
 
         return response()->json([
             "message" => "Sucessfully deleted",
-            "errors" => null
+            "success" => true
         ]);
     }
 

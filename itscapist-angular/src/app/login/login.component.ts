@@ -29,6 +29,8 @@ export class LoginComponent implements OnInit {
     }).then((json) => {
       if (!json.success) {
         this.apiResponse = json;
+      } else {
+        console.log(json.message);
       }
     });
   }

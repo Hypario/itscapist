@@ -27,7 +27,14 @@ class ApiRegisterController extends RegisterController
      */
     public function register(Request $request)
     {
-        $this->validator($request->all())->validate(); // validate
+        // validate
+        $validator = $this->validator($request->all());
+        if ($validator->fails()) {
+            return response()->json([
+                "message" => $validator->getMessageBag(),
+                "success" => true
+            ], 401);
+        }
 
         event(new Registered($user = $this->create($request->all()))); // create user
 
@@ -43,7 +50,7 @@ class ApiRegisterController extends RegisterController
     {
         return response()->json([
             "message" => "Successfully registered",
-            "errors" => null
+            "success" => true
         ], 200);
     }
 
