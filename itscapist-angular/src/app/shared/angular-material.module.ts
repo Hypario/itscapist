@@ -24,9 +24,6 @@ import {
   MatProgressBarModule,
   MatExpansionModule,
   MatMenuModule,
-  MatSnackBar,
-  MatSnackBarContainer,
-  MAT_DIALOG_DATA
 } from '@angular/material';
 
 @NgModule({
