@@ -12,6 +12,9 @@
     <a mat-button routerLink="/login">Se connecter</a>
     <a mat-button routerLink="/register">S'inscrire</a>
   </nav>
+  <nav class="nav-tool-items" *ngIf="jwt.connected">
+    <a mat-button routerLink="/profile">Profile</a>
+  </nav>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

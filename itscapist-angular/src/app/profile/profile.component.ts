@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-
+import {AuthService,JWT} from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -8,9 +9,10 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  csrftoken: string = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xOTIuMTY4LjEuNDA6ODAwMFwvYXBpXC9sb2dpbiIsImlhdCI6MTU4NTE2ODk2NSwiZXhwIjoxNTg1MTcyNTY1LCJuYmYiOjE1ODUxNjg5NjUsImp0aSI6Ijhjc0Rnc05jeFMwZGM0cngiLCJzdWIiOjEsInBydiI6Ijg3ZTBhZjFlZjlmZDE1ODEyZmRlYzk3MTUzYTE0ZTBiMDQ3NTQ2YWEifQ.TKIIkD_sCs10A3JtjJ2--uSrqzcu6Zh2wCTWFjpjGgo";
-  my_json = {};
+
   changePwd: FormGroup;
+  jwt: JWT = this.auth.jwt;
+  
 
   apiResponse: {
     success: boolean | null,
@@ -34,14 +36,17 @@ export class ProfileComponent implements OnInit {
   
 
 
-  constructor() { 
+  constructor(private auth: AuthService, private router: Router) { 
     
-    if (this.csrftoken != "") {
-    this.getProfile();
-    }
+    
   }
 
   ngOnInit(): void {
+    if (this.auth.jwt.connected) {
+      this.getProfile(this.auth.jwt.token, this.jwt.token_type);
+      } else {
+        this.router.navigate(["/login"]);
+      }
     this.changePwd = new FormGroup({
       actpwd: new FormControl(undefined, [Validators.required]),
       newpwd:  new FormControl(undefined, [Validators.required]),
@@ -69,7 +74,7 @@ export class ProfileComponent implements OnInit {
       method: 'POST',
       body: data,
       headers: {
-        "Authorization" : this.csrftoken
+        "Authorization" : this.jwt.token
       }
     }).then((response) => {
       return response.json();
@@ -81,11 +86,11 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  getProfile(): void  {
+  getProfile(token: string, token_type:string): void  {
     fetch('http://localhost:8000/api/me', {
       method: 'GET',
       headers: {
-        "Authorization" : this.csrftoken,
+        "Authorization" : token_type + " "+token,
         "Accept" : "application/json"
       }
     }).then((response) => {
