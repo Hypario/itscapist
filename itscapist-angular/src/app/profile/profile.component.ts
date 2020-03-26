@@ -47,9 +47,9 @@ export class ProfileComponent implements OnInit {
       this.router.navigateByUrl('/login');
     }
     this.changePwd = new FormGroup({
-      actpwd: new FormControl(undefined, [Validators.required]),
-      newpwd: new FormControl(undefined, [Validators.required]),
-      newpwdconf: new FormControl(undefined, [Validators.required])
+      actpwd: new FormControl(undefined, [Validators.required, Validators.minLength(8)]),
+      newpwd: new FormControl(undefined, [Validators.required, Validators.minLength(8)]),
+      newpwdconf: new FormControl(undefined, [Validators.required, Validators.minLength(8)])
     });
   }
 

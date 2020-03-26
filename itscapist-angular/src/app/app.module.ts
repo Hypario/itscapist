@@ -12,6 +12,7 @@ import { RegisterComponent } from './register/register.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { GameComponent } from './game/game.component';
 import { ProfileComponent } from './profile/profile.component';
+import { TutorialComponent } from './tutorial/tutorial.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ProfileComponent } from './profile/profile.component';
     HomeComponent,
     RegisterComponent,
     GameComponent,
-    ProfileComponent
+    ProfileComponent,
+    TutorialComponent
   ],
   imports: [
     BrowserModule,
