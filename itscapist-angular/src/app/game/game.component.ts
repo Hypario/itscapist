@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import Phaser from 'phaser';
-import {GameService} from "./game.service";
+import {GameService} from './game.service';
 
 @Component({
   selector: 'app-game',
