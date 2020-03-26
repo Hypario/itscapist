@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "itscapist-angular"
+  "defaultProject": "itscapist-angular",
+  "cli": {
+    "analytics": "69fda03e-3c59-496a-bd86-ccc3990eee3f"
+  }
 }
