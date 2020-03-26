@@ -1,7 +1,11 @@
 <div *ngIf="apiResponse && !apiResponse.success" fxLayoutAlign="center center">
-  <mat-card fxFlex="50" class="danger white-text">
+  <mat-card fxFlex="50" class="danger">
     <mat-card-content fxLayout="column" fxLayoutAlign="center">
-      {{ apiResponse.message }}
+      <mat-list>
+        <mat-list-item *ngFor="let group of apiResponse.message | keyvalue" class="white-text">
+          {{ group.value }}
+        </mat-list-item>
+      </mat-list>
     </mat-card-content>
   </mat-card>
 </div>
@@ -12,31 +16,42 @@
       <form fxLayoutAlign="stretch" fxLayout="column" [formGroup]="form" (ngSubmit)="onSubmit()">
         <mat-form-field>
           <mat-label>Nom d'utilisateur</mat-label>
-          <input matInput formControlName="username">
-          <div *ngIf="username.invalid && (username.dirty || username.touched)" class="mat-error">
-            <div *ngIf="username?.errors.required">Le nom d'utilisateur est obligatoire</div>
+          <input matInput formControlName="name" type="text">
+          <div *ngIf="name.invalid && (name.dirty || name.touched)" class="mat-error">
+            <div *ngIf="name?.errors.required">Le nom d'utilisateur est obligatoire</div>
           </div>
         </mat-form-field>
-
+        
+        <mat-form-field>
+          <mat-label>Adresse email</mat-label>
+          <input matInput formControlName="email" type="email">
+          <div *ngIf="email.invalid && (email.dirty || email.touched)" class="mat-error">
+            <div *ngIf="email?.errors.required">L'adresse email est obligatoire</div>
+            <div *ngIf="email?.errors.pattern">L'adresse email doit être une adresse email valide</div>
+          </div>
+        </mat-form-field>
+        
         <mat-form-field>
           <mat-label>Mot de passe</mat-label>
-          <input matInput formControlName="password">
+          <input matInput formControlName="password" type="password">
           <div *ngIf="password.invalid && (password.dirty || password.touched)" class="mat-error">
             <div *ngIf="password?.errors.required">Le mot de passe est obligatoire</div>
-            <div *ngIf="password?.errors.minlength">Le mot de passe doit au moins faire 6 caractères</div>
+            <div *ngIf="password?.errors.minlength">Le mot de passe doit au moins faire 8 caractères</div>
           </div>
         </mat-form-field>
-
+        
         <mat-form-field>
           <mat-label>Confirmer votre mot de passe</mat-label>
-          <input matInput formControlName="password_confirmation">
-          <div *ngIf="password_confirmation.invalid && (password_confirmation.dirty || password_confirmation.touched)" class="mat-error">
+          <input matInput formControlName="password_confirmation" type="password">
+          <div *ngIf="password_confirmation.invalid && (password_confirmation.dirty || password_confirmation.touched)"
+               class="mat-error">
             <div *ngIf="password_confirmation?.errors.required">Vous devez confirmer votre mot de passe</div>
-            <div *ngIf="password_confirmation?.errors.minlength">Le mot de passe doit au moins faire 6 caractères</div>
+            <div *ngIf="password_confirmation?.errors.minlength">Le mot de passe doit au moins faire 8 caractères</div>
           </div>
         </mat-form-field>
-
-        <button type="submit" [disabled]="form.invalid" mat-stroked-button mat-raised-button color="accent">S'inscrire</button>
+        
+        <button type="submit" [disabled]="form.invalid" mat-stroked-button mat-raised-button color="accent">S'inscrire
+        </button>
       </form>
     </mat-card-content>
   </mat-card>

@@ -4,7 +4,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['../app.component.scss', './register.component.scss']
 })
 export class RegisterComponent implements OnInit {
 
@@ -19,28 +19,43 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     const data = new FormData();
-    data.append('username', this.form.get('username').value);
+    data.append('name', this.form.get('name').value);
+    data.append('email', this.form.get('email').value);
     data.append('password', this.form.get('password').value);
     data.append('password_confirmation', this.form.get('password_confirmation').value);
     fetch('http://localhost:8000/api/register', {
       method: 'POST',
       body: data
     }).then((response) => {
-      console.log(response);
-      // return response.json();
+      console.log(response)
+      return response.json();
+    }).then((json) => {
+      if (!json.success) {
+        this.apiResponse = json;
+      } else {
+        console.log(json);
+      }
     });
   }
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      username: new FormControl(null, [Validators.required]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
-      password_confirmation: new FormControl(null, [Validators.required, Validators.minLength(6)])
+      name: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}')
+      ]),
+      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
+      password_confirmation: new FormControl(null, [Validators.required, Validators.minLength(8)])
     });
   }
 
-  get username() {
-    return this.form.get('username');
+  get name() {
+    return this.form.get('name');
+  }
+
+  get email() {
+    return this.form.get('email');
   }
 
   get password() {

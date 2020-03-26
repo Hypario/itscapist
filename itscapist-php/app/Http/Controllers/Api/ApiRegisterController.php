@@ -32,7 +32,7 @@ class ApiRegisterController extends RegisterController
         if ($validator->fails()) {
             return response()->json([
                 "message" => $validator->getMessageBag(),
-                "success" => true
+                "success" => false
             ], 401);
         }
 
