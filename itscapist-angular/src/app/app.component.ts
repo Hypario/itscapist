@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AuthService, JWT} from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'itscapist';
+
+  jwt: JWT = this.auth.jwt;
+
+  constructor(private auth: AuthService) {
+  }
+
 }

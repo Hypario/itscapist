@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,7 @@ export class RegisterComponent implements OnInit {
     message: string
   };
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: MatSnackBar, private router: Router) {
   }
 
   onSubmit() {
@@ -28,16 +29,16 @@ export class RegisterComponent implements OnInit {
       method: 'POST',
       body: data
     }).then((response) => {
-      console.log(response);
       return response.json();
     }).then((json) => {
       if (!json.success) {
         this.apiResponse = json;
       } else {
-        console.log(json);
+        this.snackBar.open('Vous êtes maintenant inscris, vous pouvez maintenant vous connecter.', '', {
+          duration: 5 * 1000
+        });
+        this.router.navigateByUrl('/login');
       }
-    }).catch(() => {
-      this.snackBar.open('erreur', 'dismiss');
     });
   }
 
