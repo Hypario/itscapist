@@ -90,6 +90,7 @@ export class ProfileComponent implements OnInit {
 
   logout(): void {
     this.api.logout();
+    this.router.navigateByUrl("/");
   }
 
 }
