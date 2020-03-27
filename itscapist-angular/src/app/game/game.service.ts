@@ -18,8 +18,8 @@ export class GameService extends Phaser.Scene {
 
   preload() {
     this.load.spritesheet('joueur', 'assets/images/Condoto.png', {
-      frameWidth: 16,
-      frameHeight: 16
+      frameWidth: 18,
+      frameHeight: 18
     });
   }
 
@@ -50,7 +50,7 @@ export class GameService extends Phaser.Scene {
       key: 'up',
       repeat: -1,
       frameRate: 3,
-      frames: this.anims.generateFrameNames('joueur', {start: 7, end: 6})
+      frames: this.anims.generateFrameNames('joueur', {start: 6, end: 7})
     });
 
     this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
@@ -62,31 +62,51 @@ export class GameService extends Phaser.Scene {
 
   update(time: number, delta: number): void {
     if (this.keyboard.D.isDown) {
-      this.joueur.anims.play('right', true);
+      gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityX(64);
     }
 
     if (this.keyboard.Q.isDown) {
-      this.joueur.anims.play('left', true);
+      gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityX(-64);
     }
     if (this.keyboard.Q.isUp && this.keyboard.D.isUp) {
       this.joueur.setVelocityX(0);
-      this.joueur.anims.stop();
     }
     if (this.keyboard.Z.isDown) {
-      this.joueur.anims.play('up', true);
+      gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityY(-64);
     }
 
     if (this.keyboard.S.isDown) {
-      this.joueur.anims.play('down', true);
       this.joueur.setVelocityY(64);
+      gestionAnims(this.keyboard, this.joueur);
     }
     if (this.keyboard.Z.isUp && this.keyboard.S.isUp) {
       this.joueur.setVelocityY(0);
     }
-
-
   }
 }
+
+
+function gestionAnims(keyboard, joueur) {
+  if (keyboard.Z.isDown && keyboard.Q.isDown || keyboard.Z.isDown && keyboard.D.isDown ) {
+    joueur.anims.play('up', true);
+  }
+  if (keyboard.S.isDown && keyboard.Q.isDown || keyboard.S.isDown && keyboard.D.isDown ) {
+    joueur.anims.play('down', true);
+  }
+  if (keyboard.S.isDown && keyboard.Q.isUp && keyboard.D.isUp && keyboard.Z.isUp) {
+    joueur.anims.play('down', true);
+  }
+  if (keyboard.D.isDown && keyboard.Q.isUp && keyboard.S.isUp && keyboard.Z.isUp) {
+    joueur.anims.play('right', true);
+  }
+  if (keyboard.Z.isDown && keyboard.Q.isUp && keyboard.D.isUp && keyboard.S.isUp) {
+    joueur.anims.play('up', true);
+  }
+  if (keyboard.Q.isDown && keyboard.S.isUp && keyboard.D.isUp && keyboard.Z.isUp) {
+    joueur.anims.play('left', true);
+  }
+}
+
