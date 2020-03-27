@@ -4,7 +4,7 @@
   fxLayoutAlign="space-between center"
 >
   <a mat-button routerLink="/"><h1>ITScapist</h1></a>
-  <nav class="nav-tool-items" *ngIf="!jwt.connected">
+  <nav class="nav-tool-items" *ngIf="!api.isConnected()">
     <a mat-button routerLink="/">
       <mat-icon>home</mat-icon>
       Accueil
@@ -12,7 +12,7 @@
     <a mat-button routerLink="/login">Se connecter</a>
     <a mat-button routerLink="/register">S'inscrire</a>
   </nav>
-  <nav class="nav-tool-items" *ngIf="jwt.connected">
+  <nav class="nav-tool-items" *ngIf="api.isConnected()">
     <a mat-button routerLink="/profile">Profile</a>
     <a mat-button routerLink="/tuto">Tutorial</a>
   </nav>

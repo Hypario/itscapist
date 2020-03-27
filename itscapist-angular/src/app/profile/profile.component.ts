@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ApiService, JWT} from '../api/api.service';
+import {ApiService} from '../api/api.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -11,7 +11,6 @@ import {Router} from '@angular/router';
 export class ProfileComponent implements OnInit {
 
   changePwd: FormGroup;
-  jwt: JWT = this.api.jwt;
 
 
   apiResponse: {
@@ -41,7 +40,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.api.jwt.connected) {
+    if (this.api.isConnected()) {
       this.getProfile();
     } else {
       this.router.navigateByUrl('/login');
@@ -82,9 +81,7 @@ export class ProfileComponent implements OnInit {
 
 
   getProfile(): void {
-    this.api.sendWithToken('GET', '/me').then((response) => {
-      return response.json();
-    }).then((json) => {
+    this.api.getUser().then((json) => {
       if (!json.success) {
         this.apiResponse = json;
       }
