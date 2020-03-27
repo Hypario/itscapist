@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 
-export interface JWT {
+interface JWT {
   token: string;
   token_type: string;
-  connected: boolean;
 }
 
 const domain = 'http://localhost:8000/api';
@@ -16,7 +15,7 @@ export class ApiService {
   constructor() {
   }
 
-  jwt: JWT = {token: '', token_type: '', connected: false};
+  jwt: JWT = {token: '', token_type: ''};
 
   send(method: string, url: string, body = null, headers = {}) {
     return fetch(domain + url, {
@@ -30,10 +29,28 @@ export class ApiService {
     return this.send(method, url, body, {Authorization: this.jwt.token_type + ' ' + this.jwt.token});
   }
 
+  /**
+   * Returns a Promise which awaits for a response, then parsed in json
+   */
+  getUser() {
+    return this.sendWithToken('GET', '/me').then((response) => {
+      return response.json();
+    });
+  }
+
+  logout() {
+    return this.sendWithToken('POST', '/logout', {token: this.jwt.token}).then((response) => {
+      return response.json();
+    });
+  }
+
+  isConnected() {
+    return this.jwt.token !== '' && this.jwt.token_type !== '';
+  }
+
   setToken(token: string, type: string) {
     this.jwt.token = token;
     this.jwt.token_type = type;
-    this.jwt.connected = this.jwt.token !== '' && this.jwt.token_type !== '';
   }
 
 }

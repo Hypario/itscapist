@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import {ApiService, JWT} from './api/api.service';
+import {Component} from '@angular/core';
+import {ApiService} from './api/api.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +9,11 @@ import {ApiService, JWT} from './api/api.service';
 export class AppComponent {
   title = 'itscapist';
 
-  jwt: JWT = this.auth.jwt;
+  constructor(public api: ApiService) {
+  }
 
-  constructor(private auth: ApiService) {
+  logout():void {
+    this.api.logout();
   }
 
 }
