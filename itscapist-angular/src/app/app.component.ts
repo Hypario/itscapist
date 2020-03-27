@@ -12,4 +12,8 @@ export class AppComponent {
   constructor(public api: ApiService) {
   }
 
+  logout():void {
+    this.api.logout();
+  }
+
 }
