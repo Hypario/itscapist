@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 interface JWT {
   token: string;
@@ -12,7 +13,7 @@ const domain = 'http://localhost:8000/api';
 })
 export class ApiService {
 
-  constructor() {
+  constructor(private snackBar: MatSnackBar) {
   }
 
   jwt: JWT = {token: '', token_type: ''};
@@ -26,7 +27,10 @@ export class ApiService {
   }
 
   sendWithToken(method: string, url: string, body = null) {
-    return this.send(method, url, body, {Authorization: this.jwt.token_type + ' ' + this.jwt.token});
+    return this.send(method, url, body, {
+      Accept: 'application/json',
+      Authorization: this.jwt.token_type + ' ' + this.jwt.token
+    });
   }
 
   /**
@@ -39,8 +43,17 @@ export class ApiService {
   }
 
   logout() {
-    return this.sendWithToken('POST', '/logout', {token: this.jwt.token}).then((response) => {
+    const data = new FormData();
+    data.append('token', this.jwt.token);
+    this.sendWithToken('POST', '/logout', data).then((response) => {
       return response.json();
+    }).then((json) => {
+      if (json.success) {
+        this.jwt = {token: '', token_type: ''};
+        this.snackBar.open('Vous êtes maintenant déconnecté.', null, {
+          duration: 5 * 1000
+        });
+      }
     });
   }
 
