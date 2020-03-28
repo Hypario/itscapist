@@ -27,6 +27,7 @@ export class GameService extends Phaser.Scene {
     this.joueur = this.physics.add.sprite(100, 100, 'joueur', 0);
     this.joueur.setCollideWorldBounds(true);
     this.joueur.setScale(2);
+    this.joueur.body.immovable(true);
     this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D');
     this.anims.create({
       key: 'down',
