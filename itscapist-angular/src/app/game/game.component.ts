@@ -16,19 +16,19 @@ export class GameComponent implements OnInit {
     this.config = {
       type: Phaser.AUTO,
       scene: [mainScene],
+      pixelArt: true, //Do not touch
       scale: {
         mode: Phaser.Scale.FIT,
         parent: 'gameContainer',
-        height: 600,
-        width: 800
+        height: 144,
+        width: 256,
       },
       physics: {
         default: 'arcade',
         arcade: {
           gravity: {y: 0}
         }
-      },
-      backgroundColor: '#5faaff'
+      }
     };
   }
 

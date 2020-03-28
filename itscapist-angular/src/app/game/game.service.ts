@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Player} from './Player';
 import {GameComponent} from './game.component';
+import {spawn} from 'child_process';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,6 @@ import {GameComponent} from './game.component';
 export class GameService extends Phaser.Scene {
 
   private joueur;
-  private map;
   private keyboard;
   private attack = false;
 
@@ -17,16 +17,39 @@ export class GameService extends Phaser.Scene {
   }
 
   preload() {
+    console.log('preload');
     this.load.spritesheet('joueur', 'assets/images/Condoto.png', {
       frameWidth: 18,
       frameHeight: 18
     });
+    // here we get our tilesets
+    this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks.gif'); // tiles_cus_perk.gif in cache under the name tiles_lvl1
+    this.load.image('tiles_lvl2', 'assets/maps/tiles/tiles_cus_irongate.gif'); // tiles_cus_irongate.gif in cache under the name tiles_lvl2
+    this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
+    this.load.tilemapTiledJSON('lvl_2', 'assets/maps/levels/RezDeChaussee.json'); // lvl_2
+
   }
 
   create() {
-    this.joueur = this.physics.add.sprite(100, 100, 'joueur', 0);
+    const map = this.make.tilemap({ key: 'lvl_1'});
+    // here, we link our tileset in the json file with the tileset selected in the preload
+    const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1'); // like Itscapist_tiles == tiles_lvl1
+    // Associating layer with their tileset
+    // lvl_1
+    const belowLayer = map.createStaticLayer('Below Player', tilesetLvl1, 0, 0);
+    const walkableLayer = map.createStaticLayer('Walkable', tilesetLvl1, 0, 0);
+    const worldLayer = map.createStaticLayer('World', tilesetLvl1, 0, 0);
+    const objectLayer = map.createStaticLayer('Objects', tilesetLvl1, 0, 0);
+    // lvl_2 plus tard
+
+    // Collisions
+    worldLayer.setCollisionByProperty({ collides: true });
+
+    // Getting the spawn Point
+    const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn Point');
+
+    this.joueur = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'joueur', 0); // Do not touch
     this.joueur.setCollideWorldBounds(true);
-    this.joueur.setScale(2);
     this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D');
     this.anims.create({
       key: 'down',
@@ -58,6 +81,9 @@ export class GameService extends Phaser.Scene {
         this.attack = true;
       }
     });
+
+    // Initialize collision with player
+    this.physics.add.collider(this.joueur, worldLayer);
   }
 
   update(time: number, delta: number): void {
