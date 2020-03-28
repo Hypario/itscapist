@@ -9,13 +9,19 @@
       <mat-icon>home</mat-icon>
       Accueil
     </a>
+    <a mat-button routerLink="/jeu">Jeu</a>
     <a mat-button routerLink="/login">Se connecter</a>
     <a mat-button routerLink="/register">S'inscrire</a>
   </nav>
   <nav class="nav-tool-items" *ngIf="api.isConnected()">
+    <a mat-button routerLink="/">
+      <mat-icon>home</mat-icon>
+      Accueil
+    </a>
+    <a mat-button routerLink="/jeu">Jeu</a>
     <a mat-button routerLink="/profile">Profile</a>
     <a mat-button routerLink="/tuto">Tutorial</a>
-    <a mat-button (click) = "logout()">Se Déconnecter</a>
+    <a mat-button (click)="api.logout()">Se Déconnecter</a>
   </nav>
 </mat-toolbar>
 
