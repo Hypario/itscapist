@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Player} from './Player';
 import {GameComponent} from './game.component';
-import {spawn} from 'child_process';
 
 @Injectable({
   providedIn: 'root'
