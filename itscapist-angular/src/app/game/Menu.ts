@@ -20,8 +20,8 @@ export class Menu extends Phaser.Scene {
 
     }
     create() {
-        this.sound.add("wild_boys").play();
-
+        let bg_music = this.sound.add("wild_boys");
+        bg_music.play();
         //this.add.image()
         
 
@@ -37,6 +37,7 @@ export class Menu extends Phaser.Scene {
             console.log("retrait souris")
         })
         playbutton.on("pointerup",() => {
+            bg_music.stop();
             this.scene.start(CST.SCENES.GAME);
         })
         //

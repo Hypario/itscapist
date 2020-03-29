@@ -18,37 +18,36 @@ export class GameService extends Phaser.Scene {
 
   preload() {
     this.load.spritesheet('joueur', 'assets/images/Condoto.png', {
-      frameWidth: 18,
-      frameHeight: 18
+      frameWidth: 16,
+      frameHeight: 16
     });
     // here we get our tilesets
-    this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks.gif'); // tiles_cus_perk.gif in cache under the name tiles_lvl1
-    this.load.image('tiles_lvl2', 'assets/maps/tiles/tiles_cus_irongate.gif'); // tiles_cus_irongate.gif in cache under the name tiles_lvl2
+    this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks_mod.png'); // tiles_cus_perk_mod.png in cache under the name tiles_lvl1
     this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
-    this.load.tilemapTiledJSON('lvl_2', 'assets/maps/levels/rezDeChaussee.json'); // lvl_2
   }
 
   create() {
     //this.scene.start(CST.SCENES.GAME)
     const map = this.make.tilemap({ key: 'lvl_1'});
     // here, we link our tileset in the json file with the tileset selected in the preload
-    const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1'); // like Itscapist_tiles == tiles_lvl1
+    const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1', 16, 16, 1, 2); // like Itscapist_tiles == tiles_lvl1
     // Associating layer with their tileset
     // lvl_1
     const belowLayer = map.createStaticLayer('Below Player', tilesetLvl1, 0, 0);
     const walkableLayer = map.createStaticLayer('Walkable', tilesetLvl1, 0, 0);
     const worldLayer = map.createStaticLayer('World', tilesetLvl1, 0, 0);
     const objectLayer = map.createStaticLayer('Objects', tilesetLvl1, 0, 0);
-    // lvl_2 plus tard
+    // lvl_2 *later*
 
     // Collisions
     worldLayer.setCollisionByProperty({ collides: true });
 
     // Getting the spawn Point
-    const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn Point');
+    const spawnPointX: number = 16 * 16;
+    const spawnPointY: number = 41 * 16;
 
-    this.joueur = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'joueur', 0); // Do not touch
-    this.joueur.setCollideWorldBounds(true);
+    this.joueur = this.physics.add.sprite(spawnPointX, spawnPointY, 'joueur', 0);
+    this.joueur.setCollideWorldBounds(false);
     this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D');
     this.anims.create({
       key: 'down',
@@ -80,6 +79,10 @@ export class GameService extends Phaser.Scene {
         this.attack = true;
       }
     });
+    // fix the camera to the player
+    const camera = this.cameras.main;
+    camera.startFollow(this.joueur);
+    camera.setBounds( 0, 0, map.widthInPixels, map.heightInPixels);
 
     // Initialize collision with player
     this.physics.add.collider(this.joueur, worldLayer);
@@ -113,7 +116,7 @@ export class GameService extends Phaser.Scene {
   }
 }
 
-
+// @ts-ignore
 function gestionAnims(keyboard, joueur) {
   if (keyboard.Z.isDown && keyboard.Q.isDown || keyboard.Z.isDown && keyboard.D.isDown ) {
     joueur.anims.play('up', true);
@@ -134,4 +137,3 @@ function gestionAnims(keyboard, joueur) {
     joueur.anims.play('left', true);
   }
 }
-
