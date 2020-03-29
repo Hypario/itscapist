@@ -18,7 +18,7 @@ export class GameComponent implements OnInit {
     this.config = {
       type: Phaser.AUTO,
       scene: [new Load],
-      pixelArt: true, //Do not touch
+      //pixelArt: true, //Do not touch
       scale: {
         mode: Phaser.Scale.FIT,
         parent: 'gameContainer',
