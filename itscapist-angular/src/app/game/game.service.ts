@@ -27,7 +27,6 @@ export class GameService extends Phaser.Scene {
     this.load.image('tiles_lvl2', 'assets/maps/tiles/tiles_cus_irongate.gif'); // tiles_cus_irongate.gif in cache under the name tiles_lvl2
     this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
     this.load.tilemapTiledJSON('lvl_2', 'assets/maps/levels/RezDeChaussee.json'); // lvl_2
-
   }
 
   create() {
@@ -81,10 +80,7 @@ export class GameService extends Phaser.Scene {
         this.attack = true;
       }
     });
-    //
-    //
     // fix the camera to the player
-
     this.cameras.main.setBounds( 0, 0, 1500, 1500);
     this.cameras.main.startFollow(this.joueur);
 
@@ -119,7 +115,6 @@ export class GameService extends Phaser.Scene {
     }
   }
 }
-
 
 // @ts-ignore
 function gestionAnims(keyboard, joueur) {
