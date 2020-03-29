@@ -21,14 +21,14 @@ export class GameService extends Phaser.Scene {
       frameHeight: 16
     });
     // here we get our tilesets
-    this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks.gif'); // tiles_cus_perk.gif in cache under the name tiles_lvl1
+    this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks_mod.png'); // tiles_cus_perk_mod.png in cache under the name tiles_lvl1
     this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
   }
 
   create() {
     const map = this.make.tilemap({ key: 'lvl_1'});
     // here, we link our tileset in the json file with the tileset selected in the preload
-    const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1'); // like Itscapist_tiles == tiles_lvl1
+    const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1', 16, 16, 1, 2); // like Itscapist_tiles == tiles_lvl1
     // Associating layer with their tileset
     // lvl_1
     const belowLayer = map.createStaticLayer('Below Player', tilesetLvl1, 0, 0);

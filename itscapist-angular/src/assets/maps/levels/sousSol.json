@@ -85,13 +85,13 @@
         {
          "columns":4,
          "firstgid":1,
-         "image":"..\/tiles\/tiles_cus_perks.gif",
-         "imageheight":512,
-         "imagewidth":64,
-         "margin":0,
+         "image":"..\/tiles\/tiles_cus_perks_mod.png",
+         "imageheight":576,
+         "imagewidth":72,
+         "margin":1,
          "name":"Itscapist_tiles",
-         "spacing":0,
-         "tilecount":128,
+         "spacing":2,
+         "tilecount":144,
          "tileheight":16,
          "tiles":[
                 {
