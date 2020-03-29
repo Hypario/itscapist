@@ -19,8 +19,8 @@ export class GameService extends Phaser.Scene {
   preload() {
     console.log('preload');
     this.load.spritesheet('joueur', 'assets/images/Condoto.png', {
-      frameWidth: 18,
-      frameHeight: 18
+      frameWidth: 16,
+      frameHeight: 16
     });
     // here we get our tilesets
     this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks.gif'); // tiles_cus_perk.gif in cache under the name tiles_lvl1
@@ -48,7 +48,7 @@ export class GameService extends Phaser.Scene {
     // Getting the spawn Point
     const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn Point');
 
-    this.joueur = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'joueur', 0); // Do not touch
+    this.joueur = this.physics.add.sprite(1000, 1000, 'joueur', 0); // Do not touch
     this.joueur.setCollideWorldBounds(true);
     this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D');
     this.anims.create({
@@ -81,6 +81,16 @@ export class GameService extends Phaser.Scene {
         this.attack = true;
       }
     });
+    //
+    //
+    // fix the camera to the player
+
+    this.cameras.main.setBounds( 0, 0, 500, 500);
+    this.cameras.main.startFollow(this.joueur);
+
+
+
+
 
     // Initialize collision with player
     this.physics.add.collider(this.joueur, worldLayer);
@@ -115,6 +125,7 @@ export class GameService extends Phaser.Scene {
 }
 
 
+// @ts-ignore
 function gestionAnims(keyboard, joueur) {
   if (keyboard.Z.isDown && keyboard.Q.isDown || keyboard.Z.isDown && keyboard.D.isDown ) {
     joueur.anims.play('up', true);
@@ -135,4 +146,3 @@ function gestionAnims(keyboard, joueur) {
     joueur.anims.play('left', true);
   }
 }
-
