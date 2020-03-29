@@ -40,7 +40,7 @@ export class GameService extends Phaser.Scene {
     const walkableLayer = map.createStaticLayer('Walkable', tilesetLvl1, 0, 0);
     const worldLayer = map.createStaticLayer('World', tilesetLvl1, 0, 0);
     const objectLayer = map.createStaticLayer('Objects', tilesetLvl1, 0, 0);
-    // lvl_2 plus tard
+    // lvl_2 *later*
 
     // Collisions
     worldLayer.setCollisionByProperty({ collides: true });
@@ -48,8 +48,8 @@ export class GameService extends Phaser.Scene {
     // Getting the spawn Point
     const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn Point');
 
-    this.joueur = this.physics.add.sprite(1000, 1000, 'joueur', 0); // Do not touch
-    this.joueur.setCollideWorldBounds(true);
+    this.joueur = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'joueur', 0); // Do not touch
+    this.joueur.setCollideWorldBounds(false);
     this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D');
     this.anims.create({
       key: 'down',
@@ -85,12 +85,8 @@ export class GameService extends Phaser.Scene {
     //
     // fix the camera to the player
 
-    this.cameras.main.setBounds( 0, 0, 500, 500);
+    this.cameras.main.setBounds( 0, 0, 1500, 1500);
     this.cameras.main.startFollow(this.joueur);
-
-
-
-
 
     // Initialize collision with player
     this.physics.add.collider(this.joueur, worldLayer);
