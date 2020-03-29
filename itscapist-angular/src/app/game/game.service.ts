@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Player} from './Player';
 import {GameComponent} from './game.component';
-
-
 @Injectable({
   providedIn: 'root'
 })
