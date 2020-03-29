@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Player} from './Player';
 import {GameComponent} from './game.component';
-import {CST} from "./CST";
+import {CST} from './CST';
 
 @Injectable({
   providedIn: 'root'
@@ -27,8 +27,8 @@ export class GameService extends Phaser.Scene {
   }
 
   create() {
-    //this.scene.start(CST.SCENES.GAME)
-    const map = this.make.tilemap({ key: 'lvl_1'});
+    // this.scene.start(CST.SCENES.GAME)
+    const map = this.make.tilemap({key: 'lvl_1'});
     // here, we link our tileset in the json file with the tileset selected in the preload
     const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1', 16, 16, 1, 2); // like Itscapist_tiles == tiles_lvl1
     // Associating layer with their tileset
@@ -40,7 +40,7 @@ export class GameService extends Phaser.Scene {
     // lvl_2 *later*
 
     // Collisions
-    worldLayer.setCollisionByProperty({ collides: true });
+    worldLayer.setCollisionByProperty({collides: true});
 
     // Getting the spawn Point
     const spawnPointX: number = 16 * 16;
@@ -82,7 +82,7 @@ export class GameService extends Phaser.Scene {
     // fix the camera to the player
     const camera = this.cameras.main;
     camera.startFollow(this.joueur);
-    camera.setBounds( 0, 0, map.widthInPixels, map.heightInPixels);
+    camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
     // Initialize collision with player
     this.physics.add.collider(this.joueur, worldLayer);
@@ -118,10 +118,10 @@ export class GameService extends Phaser.Scene {
 
 // @ts-ignore
 function gestionAnims(keyboard, joueur) {
-  if (keyboard.Z.isDown && keyboard.Q.isDown || keyboard.Z.isDown && keyboard.D.isDown ) {
+  if (keyboard.Z.isDown && keyboard.Q.isDown || keyboard.Z.isDown && keyboard.D.isDown) {
     joueur.anims.play('up', true);
   }
-  if (keyboard.S.isDown && keyboard.Q.isDown || keyboard.S.isDown && keyboard.D.isDown ) {
+  if (keyboard.S.isDown && keyboard.Q.isDown || keyboard.S.isDown && keyboard.D.isDown) {
     joueur.anims.play('down', true);
   }
   if (keyboard.S.isDown && keyboard.Q.isUp && keyboard.D.isUp && keyboard.Z.isUp) {

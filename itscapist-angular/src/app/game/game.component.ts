@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import Phaser from 'phaser';
 import {GameService} from './game.service';
-import {Menu} from "./Menu";
-import { Load } from './Load';
+import {Menu} from './Menu';
+import {Load} from './Load';
+import {NavigationStart, Router} from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -14,12 +15,12 @@ export class GameComponent implements OnInit {
   phaserGame: Phaser.Game;
   config: Phaser.Types.Core.GameConfig;
 
-  constructor() {
+  constructor(private router: Router) {
     this.config = {
       type: Phaser.AUTO,
       scene: [new Load()],
       // @ts-ignore
-      pixelArt: true, //Do not touch
+      pixelArt: true, // Do not touch
       scale: {
         mode: Phaser.Scale.FIT,
         parent: 'gameContainer',
@@ -36,7 +37,19 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.phaserGame = new Phaser.Game(this.config);
+    if (!this.phaserGame) {
+      this.phaserGame = new Phaser.Game(this.config);
+    }
+
+    const canv = document.getElementsByTagName('canvas');
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        if (canv.length > 0) {
+          this.phaserGame.destroy(true);
+        }
+      }
+    });
   }
 
 }
