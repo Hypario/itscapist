@@ -16,6 +16,7 @@ export class Menu extends Phaser.Scene {
         let audiomanage = this.game.sound;
 
         this.load.audio("wild_boys","assets/sounds/music/wild_boys.ogg");
+        this.load.image("playbtn",  "assets/images/playbtn.png");
         console.log(audiomanage); 
 
     }
@@ -26,7 +27,7 @@ export class Menu extends Phaser.Scene {
         
 
         
-        let playbutton = this.add.text(this.game.renderer.width/2, this.game.renderer.height/2, "Jouer au jeu").setDepth(1)
+        let playbutton = this.add.image(0,this.game.renderer.height-24, "playbtn").setOrigin(0).setDepth(1)
 
         this.scene.add(CST.SCENES.GAME, GameService, false);
         playbutton.setInteractive({ useHandCursor: true })
