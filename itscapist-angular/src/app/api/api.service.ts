@@ -6,7 +6,7 @@ interface JWT {
   token_type: string;
 }
 
-const domain = 'http://localhost:8000/api';
+const domain = 'http://390-server:8000/api';
 
 @Injectable({
   providedIn: 'root'

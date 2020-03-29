@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Player} from './Player';
 import {GameComponent} from './game.component';
-import {spawn} from 'child_process';
+import {CST} from "./CST";
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,10 @@ export class GameService extends Phaser.Scene {
   private attack = false;
 
   constructor() {
-    super({key: 'scene'});
+    super({key: CST.SCENES.GAME});
   }
 
   preload() {
-    console.log('preload');
     this.load.spritesheet('joueur', 'assets/images/Condoto.png', {
       frameWidth: 18,
       frameHeight: 18
@@ -26,11 +25,11 @@ export class GameService extends Phaser.Scene {
     this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks.gif'); // tiles_cus_perk.gif in cache under the name tiles_lvl1
     this.load.image('tiles_lvl2', 'assets/maps/tiles/tiles_cus_irongate.gif'); // tiles_cus_irongate.gif in cache under the name tiles_lvl2
     this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
-    this.load.tilemapTiledJSON('lvl_2', 'assets/maps/levels/RezDeChaussee.json'); // lvl_2
-
+    this.load.tilemapTiledJSON('lvl_2', 'assets/maps/levels/rezDeChaussee.json'); // lvl_2
   }
 
   create() {
+    //this.scene.start(CST.SCENES.GAME)
     const map = this.make.tilemap({ key: 'lvl_1'});
     // here, we link our tileset in the json file with the tileset selected in the preload
     const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1'); // like Itscapist_tiles == tiles_lvl1

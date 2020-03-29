@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import Phaser from 'phaser';
 import {GameService} from './game.service';
+import {Menu} from "./Menu";
+import { Load } from './Load';
 
 @Component({
   selector: 'app-game',
@@ -12,10 +14,10 @@ export class GameComponent implements OnInit {
   phaserGame: Phaser.Game;
   config: Phaser.Types.Core.GameConfig;
 
-  constructor(private mainScene: GameService) {
+  constructor() {
     this.config = {
       type: Phaser.AUTO,
-      scene: [mainScene],
+      scene: [new Load],
       pixelArt: true, //Do not touch
       scale: {
         mode: Phaser.Scale.FIT,
