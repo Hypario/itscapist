@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Player} from './Player';
 import {GameComponent} from './game.component';
-import {spawn} from 'child_process';
+
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +24,7 @@ export class GameService extends Phaser.Scene {
     });
     // here we get our tilesets
     this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks.gif'); // tiles_cus_perk.gif in cache under the name tiles_lvl1
-    this.load.image('tiles_lvl2', 'assets/maps/tiles/tiles_cus_irongate.gif'); // tiles_cus_irongate.gif in cache under the name tiles_lvl2
     this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
-    this.load.tilemapTiledJSON('lvl_2', 'assets/maps/levels/RezDeChaussee.json'); // lvl_2
   }
 
   create() {
@@ -45,9 +43,10 @@ export class GameService extends Phaser.Scene {
     worldLayer.setCollisionByProperty({ collides: true });
 
     // Getting the spawn Point
-    const spawnPoint = map.findObject('Objects', obj => obj.name === 'Spawn Point');
+    const spawnPointX: number = 16 * 16;
+    const spawnPointY: number = 41 * 16;
 
-    this.joueur = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'joueur', 0); // Do not touch
+    this.joueur = this.physics.add.sprite(spawnPointX, spawnPointY, 'joueur', 0);
     this.joueur.setCollideWorldBounds(false);
     this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D');
     this.anims.create({
@@ -81,8 +80,9 @@ export class GameService extends Phaser.Scene {
       }
     });
     // fix the camera to the player
-    this.cameras.main.setBounds( 0, 0, 1500, 1500);
-    this.cameras.main.startFollow(this.joueur);
+    const camera = this.cameras.main;
+    camera.startFollow(this.joueur);
+    camera.setBounds( 0, 0, map.widthInPixels, map.heightInPixels);
 
     // Initialize collision with player
     this.physics.add.collider(this.joueur, worldLayer);
