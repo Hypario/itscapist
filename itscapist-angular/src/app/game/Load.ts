@@ -9,7 +9,6 @@ export class Load extends Phaser.Scene {
   }
 
   init() {
-    // this.load.image("")
     const loadingBar = this.add.graphics({
       fillStyle: {
         color: 0xffffff
