@@ -25,6 +25,20 @@ export class GameService extends Phaser.Scene {
     // here we get our tilesets
     this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks_mod.png'); // tiles_cus_perk_mod.png in cache under the name tiles_lvl1
     this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
+    this.load.audio('never','assets/sounds/music/never.ogg');
+
+    // barre de chargement
+    const loadingBar = this.add.graphics({
+      fillStyle: {
+        color: 0xfefefe
+      }
+    });
+    this.load.on('progress', (percent) => {
+      loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 50)
+    });
+
+
+
   }
 
   create() {
@@ -34,6 +48,8 @@ export class GameService extends Phaser.Scene {
     const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1', 16, 16, 1, 2); // like Itscapist_tiles == tiles_lvl1
     // Associating layer with their tileset
     // lvl_1
+    const musique = this.sound.add("never");
+    musique.play();
     const belowLayer = map.createStaticLayer('Below Player', tilesetLvl1, 0, 0);
     const walkableLayer = map.createStaticLayer('Walkable', tilesetLvl1, 0, 0);
     const worldLayer = map.createStaticLayer('World', tilesetLvl1, 0, 0);
