@@ -1,0 +1,57 @@
+body
+{
+  margin: 10px 0 ;
+  padding: 0 ;
+  text-align: center ;
+  font: 0.8em "Trebuchet MS", helvetica, sans-serif ;
+  background: #dea ;
+}
+
+div#conteneur
+{
+  width: 770px ;
+  margin: 0 auto ;
+  text-align: left ;
+  border: 2px solid #ab4 ;
+  background: #fff ;
+}
+img{
+  margin: 50px;
+}
+h1#header
+{
+  // height: 258px;
+}
+
+pre
+{
+  padding: 0 30px 0 100px ;
+}
+
+p#footer
+{
+  margin: 0 ;
+  padding-right: 10px ;
+  line-height: 30px ;
+  text-align: right ;
+  color: #8a0 ;
+}
+
+pre
+{
+  overflow: auto ;
+  background: #dea ;
+  border: 2px solid #9b2 ;
+  padding: 5px 0 0 5px ;
+  font-size: 1.2em ;
+}
+
+pre span
+{
+  color: #560 ;
+}
+
+pre span.comment
+{
+  color: #b30000 ;
+}
