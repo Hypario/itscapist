@@ -11,7 +11,11 @@ export class GameService extends Phaser.Scene {
   private joueur;
   private keyboard;
   private attack = false;
-
+  private score = 100000;
+  private scoreText;
+  private EnergyText;
+  private intelText;
+  private strenghText;
   constructor() {
     super({key: CST.SCENES.GAME});
   }
@@ -49,6 +53,7 @@ export class GameService extends Phaser.Scene {
     this.joueur = this.physics.add.sprite(spawnPointX, spawnPointY, 'joueur', 0);
     this.joueur.setCollideWorldBounds(false);
     this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D');
+    // animations gestion
     this.anims.create({
       key: 'down',
       repeat: -1,
@@ -86,17 +91,42 @@ export class GameService extends Phaser.Scene {
 
     // Initialize collision with player
     this.physics.add.collider(this.joueur, worldLayer);
+
+    this.scoreText = this.add.text(2, 2 , 'Score: 100000', {
+      font: '10px Arial',
+      fill: '#ffffff',
+      padding: {x: 3, y: 3},
+    }).setScrollFactor(0);
+    this.EnergyText = this.add.text(2, 100 , 'Energy: 100', {
+      font: '10px Arial',
+      fill: '#ffffff',
+      padding: {x: 3, y: 3},
+    }).setScrollFactor(0);
+    this.strenghText = this.add.text(2, 110 , 'Strengh: 10', {
+      font: '10px Arial',
+      fill: '#ffffff',
+      padding: {x: 3, y: 3},
+    }).setScrollFactor(0);
+    this.intelText = this.add.text(2, 120 , 'Intelligence: 10', {
+      font: '10px Arial',
+      fill: '#ffffff',
+      padding: {x: 3, y: 3},
+    }).setScrollFactor(0);
   }
 
   update(time: number, delta: number): void {
     if (this.keyboard.D.isDown) {
       gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityX(64);
+      this.score -= 5;
+      this.scoreText.setText('Score: ' + this.score);
     }
 
     if (this.keyboard.Q.isDown) {
       gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityX(-64);
+      this.score -= 5;
+      this.scoreText.setText('Score: ' + this.score);
     }
     if (this.keyboard.Q.isUp && this.keyboard.D.isUp) {
       this.joueur.setVelocityX(0);
@@ -104,14 +134,21 @@ export class GameService extends Phaser.Scene {
     if (this.keyboard.Z.isDown) {
       gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityY(-64);
+      this.score -= 5;
+      this.scoreText.setText('Score: ' + this.score);
     }
 
     if (this.keyboard.S.isDown) {
       this.joueur.setVelocityY(64);
       gestionAnims(this.keyboard, this.joueur);
+      this.score -= 5;
+      this.scoreText.setText('Score: ' + this.score);
     }
     if (this.keyboard.Z.isUp && this.keyboard.S.isUp) {
       this.joueur.setVelocityY(0);
+    }
+    if (this.score === 0) {
+      console.log('losed');
     }
   }
 }
