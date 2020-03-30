@@ -34,4 +34,5 @@ export class Menu extends Phaser.Scene {
       this.scene.start(CST.SCENES.GAME);
     });
   }
+
 }
