@@ -21,6 +21,7 @@ export class GameService extends Phaser.Scene {
   }
 
   preload() {
+    
     this.load.spritesheet('joueur', 'assets/images/Condoto.png', {
       frameWidth: 16,
       frameHeight: 16
