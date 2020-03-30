@@ -11,13 +11,14 @@ export class Menu extends Phaser.Scene {
 
   preload() {
     this.load.audio('wild_boys', 'assets/sounds/music/wild_boys.ogg');
+    this.load.image('logo_jeu', 'assets/images/logo.png');
     this.load.image('playbtn', 'assets/images/playbtn.png');
   }
 
   create() {
     const bgMusic = this.sound.add('wild_boys');
     bgMusic.play();
-
+    const gamelogo = this.add.image(this.game.renderer.width / 2 - (118 / 2), 0, 'logo_jeu').setOrigin(0).setDepth(1);
     const playbutton = this.add.image(0, this.game.renderer.height - 24, 'playbtn').setOrigin(0).setDepth(1);
 
     this.scene.add(CST.SCENES.GAME, GameService, false);
