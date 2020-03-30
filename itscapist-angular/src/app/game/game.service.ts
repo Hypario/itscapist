@@ -9,6 +9,8 @@ export class GameService extends Phaser.Scene {
   private joueur;
   private keyboard;
   private attack = false;
+  private currentMap;
+  private currentWorldLayer;
 
   constructor() {
     super({key: 'scene'});
@@ -35,12 +37,13 @@ export class GameService extends Phaser.Scene {
     const walkableLayer = map.createStaticLayer('Walkable', tilesetLvl1, 0, 0);
     const worldLayer = map.createStaticLayer('World', tilesetLvl1, 0, 0);
     const objectLayer = map.createStaticLayer('Objects', tilesetLvl1, 0, 0);
+    this.currentMap = map;
+    this.currentWorldLayer = worldLayer;
     // lvl_2 *later*
 
     // Collisions
     worldLayer.setCollisionByProperty({ collides: true });
-
-    // Getting the spawn Point
+    // Setting the spawn Point
     const spawnPointX: number = 16 * 16;
     const spawnPointY: number = 41 * 16;
 
@@ -90,11 +93,13 @@ export class GameService extends Phaser.Scene {
     if (this.keyboard.D.isDown) {
       gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityX(64);
+      console.log(lookTileAt(this.currentMap, this.joueur, 'right'));
     }
 
     if (this.keyboard.Q.isDown) {
       gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityX(-64);
+      console.log(lookTileAt(this.currentMap, this.joueur, 'left'));
     }
     if (this.keyboard.Q.isUp && this.keyboard.D.isUp) {
       this.joueur.setVelocityX(0);
@@ -102,11 +107,13 @@ export class GameService extends Phaser.Scene {
     if (this.keyboard.Z.isDown) {
       gestionAnims(this.keyboard, this.joueur);
       this.joueur.setVelocityY(-64);
+      console.log(lookTileAt(this.currentMap, this.joueur, 'up'));
     }
 
     if (this.keyboard.S.isDown) {
       this.joueur.setVelocityY(64);
       gestionAnims(this.keyboard, this.joueur);
+      console.log(lookTileAt(this.currentMap, this.joueur, 'down'));
     }
     if (this.keyboard.Z.isUp && this.keyboard.S.isUp) {
       this.joueur.setVelocityY(0);
@@ -133,5 +140,40 @@ function gestionAnims(keyboard, joueur) {
   }
   if (keyboard.Q.isDown && keyboard.S.isUp && keyboard.D.isUp && keyboard.Z.isUp) {
     joueur.anims.play('left', true);
+  }
+}
+
+// Functions used to get the coordinates of the player in tile unit
+// joueur: object sprite used as the player
+
+function joueurPositionX(joueur) {
+  const joueurPosX: integer = Math.round((joueur.x / 16) - 1 );
+  return joueurPosX;
+}
+
+function joueurPositionY(joueur) {
+  const joueurPosY: integer = Math.round((joueur.y / 16) - 1);
+  return joueurPosY;
+}
+
+// Functions to get the tiles next to the player
+// map: map you want tu check the tiles for
+// joueur: object sprite used as the player
+// direction: direction you wanna look
+function lookTileAt(map,joueur,direction) {
+  console.log(joueurPositionX(joueur),joueurPositionY(joueur));
+  if (direction === 'up') {
+    return map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) + 1, true, 2);
+  }
+  if (direction === 'down') {
+    return map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) - 1, true, 2);
+  }
+  if (direction === 'left') {
+    return map.getTileAt(joueurPositionX(joueur) - 1, joueurPositionY(joueur), true, 2);
+  }
+  if (direction === 'right') {
+    return map.getTileAt(joueurPositionX(joueur) + 1, joueurPositionY(joueur), true, 2);
+  } else {
+    return null;
   }
 }
