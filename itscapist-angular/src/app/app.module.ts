@@ -13,6 +13,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { GameComponent } from './game/game.component';
 import { ProfileComponent } from './profile/profile.component';
 import { TutorialComponent } from './tutorial/tutorial.component';
+import { ListePlayersComponent } from './liste-players/liste-players.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { TutorialComponent } from './tutorial/tutorial.component';
     RegisterComponent,
     GameComponent,
     ProfileComponent,
-    TutorialComponent
+    TutorialComponent,
+    ListePlayersComponent
   ],
   imports: [
     BrowserModule,
