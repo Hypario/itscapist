@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Player} from '../game/Player';
-import {PlayersService} from '../../players.service';
+//import {PlayersService} from '../../players.service';
 
 
 @Component({
@@ -11,15 +11,16 @@ import {PlayersService} from '../../players.service';
 export class ListePlayersComponent implements OnInit {
   loading = false;
   players: Player[];
-  constructor(private playersService: PlayersService) { }
+  constructor() { }
 
   ngOnInit() {
     this.loading = true;
-    this.playersService.getPlayers().subscribe(rep => {
+  /*  this.playersService.getPlayers().subscribe(rep => {
 //      console.log(rep);
       this.players = rep;
       this.loading = false;
-    });
+    });*/
+    this.loading=false;
   }
 
 }
