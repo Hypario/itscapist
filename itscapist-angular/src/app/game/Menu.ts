@@ -10,7 +10,7 @@ export class Menu extends Phaser.Scene {
   }
 
   preload() {
-    this.load.audio('wild_boys', ['assets/sounds/music/wild_boys.ogg', "assets/sounds/music/wild_boys.mp3"]);    
+    this.load.audio('wild_boys', ['assets/sounds/music/champions.ogg', "assets/sounds/music/champions.mp3"]);    
     this.load.image('logo_jeu', 'assets/images/logo_jeu.png');
     this.load.image('playbtn', 'assets/images/playbtn.png');
   }
