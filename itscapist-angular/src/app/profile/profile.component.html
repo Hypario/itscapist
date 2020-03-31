@@ -5,8 +5,11 @@
       <div *ngIf = "save_response != undefined">
       <p> Votre temps de jeu : <b>undefined</b><br>
         Salle actuelle : <b>{{ save_response.map_id }}</b><br>
-        Santé : <b>{{ save_response.health }}</b><br>
-        Inventaire : <b>{{ save_response.inventory }}</b><br>
+        Énergie : <b>{{ save_response.health }}</b><br>
+        Score : <b>{{ userdata.score }}</b><br>
+        Intelligence : <b>{{ userdata.intell }}</b><br>
+        Force : <b>{{ userdata.strength }}</b>
+        <!--Inventaire : <b>{{ save_response.inventory }}</b><br>-->
       </p>
       <button mat-raised-button color="warn" (click)=delsave() title="Attention ! Vous devez être sûr de ce que vous faisez !">Supprimer ma sauvegarde</button>
       <br>
@@ -52,7 +55,6 @@
       <p>
         Date d'inscription : <b> {{ apiResponse.created_at }}</b>
       </p>
-      <h3>D'autres informations seront prochainement disponibles ici aussi 😉</h3>
       <button mat-stroked-button color="warn" (click) = "logout()">Se déconnecter</button>
     </mat-card-content>
   </mat-card>

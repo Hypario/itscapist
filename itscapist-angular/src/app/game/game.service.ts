@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Player} from './Player';
 import {GameComponent} from './game.component';
 import {CST} from './CST';
+import {ApiService} from "../api/api.service";
+import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,7 @@ export class GameService extends Phaser.Scene {
   private EnergyText;
   private intelText;
   private strenghText;
-  constructor() {
+  constructor(private api: ApiService) {
     super({key: CST.SCENES.GAME});
   }
 
@@ -30,17 +32,18 @@ export class GameService extends Phaser.Scene {
     });
     // here we get our tilesets
     this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks_mod.png'); // tiles_cus_perk_mod.png in cache under the name tiles_lvl1
+    //this.load.image("save_btn","assets/images/playbtn.png");
     this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
     this.load.audio('never', ['assets/sounds/music/never.ogg','assets/sounds/music/never.mp3']);
 
     // barre de chargement
     const loadingBar = this.add.graphics({
       fillStyle: {
-        color: 0xfefefe
+        color: 0x2052ff
       }
     });
     this.load.on('progress', (percent) => {
-      loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 50);
+      loadingBar.fillRect(0, this.game.renderer.height / 2, this.game.renderer.width * percent, 10);
     });
 
 
@@ -48,7 +51,6 @@ export class GameService extends Phaser.Scene {
   }
 
   create() {
-    // this.scene.start(CST.SCENES.GAME)
     const map = this.make.tilemap({key: 'lvl_1'});
     // here, we link our tileset in the json file with the tileset selected in the preload
     const tilesetLvl1 = map.addTilesetImage('Itscapist_tiles', 'tiles_lvl1', 16, 16, 1, 2); // like Itscapist_tiles == tiles_lvl1
@@ -133,6 +135,26 @@ export class GameService extends Phaser.Scene {
       fill: '#ffffff',
       padding: {x: 3, y: 3},
     }).setScrollFactor(0);
+
+    // Save button (appears only if user is logged)
+    if (this.api.isConnected()) {
+    const save_btn = this.add.text(190, 2, "Sauvegarder",{
+      font: '10px Arial',
+      fill: '#20c2ff',
+      padding: {x: 3, y: 3},
+    }).setScrollFactor(0);
+    save_btn.setInteractive({useHandCursor: true});
+    save_btn.on('pointerover', () => {
+      save_btn.setColor("#ff2052");
+    });
+    save_btn.on('pointerout', () => {
+      save_btn.setColor("#20c2ff");
+    });
+    save_btn.on("pointerup", () => {
+      this.backup(this.score, 100,0,0);
+    });
+  }
+
   }
 
   update(time: number, delta: number): void {
@@ -176,6 +198,28 @@ export class GameService extends Phaser.Scene {
       console.log('losed');
     }
   }
+
+  // Function to backup current user to his/her profile
+  backup(score: number, energy: number, strength: number, intelligence: number) {
+    // On envoie à l'api du serveur
+    let inv = {
+      score : score,
+      intell : intelligence,
+      strength: strength
+    }
+    let response = new FormData();
+    response.append("health",energy.toString());
+    response.append("map_id","0");
+    response.append("inventory",JSON.stringify(inv));
+    if (this.api.isConnected()) {
+      this.api.sendWithToken("POST","/save", response).then((response) => {
+        return response.json();
+      }).then((json) => {
+        console.log(json);
+      });
+    }
+  }
+
 }
 
 // @ts-ignore
@@ -233,4 +277,5 @@ function lookTileAt(map, joueur, direction) {
   } else {
     return null;
   }
+
 }

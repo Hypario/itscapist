@@ -4,6 +4,7 @@ import {GameService} from './game.service';
 import {Menu} from './Menu';
 import {Load} from './Load';
 import {NavigationStart, Router} from '@angular/router';
+import { ApiService } from '../api/api.service';
 
 @Component({
   selector: 'app-game',
@@ -15,10 +16,10 @@ export class GameComponent implements OnInit {
   phaserGame: Phaser.Game;
   config: Phaser.Types.Core.GameConfig;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private api: ApiService) {
     this.config = {
       type: Phaser.AUTO,
-      scene: [new Load()],
+      scene: [new Load(this.api)],
       // @ts-ignore
       pixelArt: true, // Do not touch
       scale: {
