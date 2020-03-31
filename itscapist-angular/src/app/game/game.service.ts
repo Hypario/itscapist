@@ -3,7 +3,6 @@ import {Player} from './Player';
 import {GameComponent} from './game.component';
 import {CST} from './CST';
 import {ApiService} from "../api/api.service";
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
 
 @Injectable({
   providedIn: 'root'
