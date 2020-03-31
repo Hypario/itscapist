@@ -31,7 +31,7 @@ export class GameService extends Phaser.Scene {
     // here we get our tilesets
     this.load.image('tiles_lvl1', 'assets/maps/tiles/tiles_cus_perks_mod.png'); // tiles_cus_perk_mod.png in cache under the name tiles_lvl1
     this.load.tilemapTiledJSON('lvl_1', 'assets/maps/levels/sousSol.json'); // lvl_1
-    this.load.audio('never', 'assets/sounds/music/never.ogg');
+    this.load.audio('never', ['assets/sounds/music/never.ogg','assets/sounds/music/never.mp3']);
 
     // barre de chargement
     const loadingBar = this.add.graphics({
