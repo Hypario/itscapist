@@ -18,6 +18,8 @@ export class GameService extends Phaser.Scene {
   private EnergyText;
   private intelText;
   private strenghText;
+  private lastDirection;
+
   constructor() {
     super({key: CST.SCENES.GAME});
   }
@@ -44,7 +46,6 @@ export class GameService extends Phaser.Scene {
     });
 
 
-
   }
 
   create() {
@@ -58,7 +59,7 @@ export class GameService extends Phaser.Scene {
     musique.play();
     const belowLayer = map.createStaticLayer('Below Player', tilesetLvl1, 0, 0);
     const walkableLayer = map.createStaticLayer('Walkable', tilesetLvl1, 0, 0);
-    const worldLayer = map.createStaticLayer('World', tilesetLvl1, 0, 0);
+    const worldLayer = map.createDynamicLayer('World', tilesetLvl1, 0, 0);
     const objectLayer = map.createStaticLayer('Objects', tilesetLvl1, 0, 0);
     this.currentMap = map;
     this.currentWorldLayer = worldLayer;
@@ -68,12 +69,12 @@ export class GameService extends Phaser.Scene {
     worldLayer.setCollisionByProperty({ collides: true });
 
     // Setting the spawn Point
-    const spawnPointX: number = 16 * 16;
-    const spawnPointY: number = 41 * 16;
+    const spawnPointX: number = (16 * 16) + 0.5;
+    const spawnPointY: number = (41 * 16) + 0.5;
 
     this.joueur = this.physics.add.sprite(spawnPointX, spawnPointY, 'joueur', 0);
     this.joueur.setCollideWorldBounds(false);
-    this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D');
+    this.keyboard = this.input.keyboard.addKeys('Z,Q,S,D,E');
     // animations gestion
     this.anims.create({
       key: 'down',
@@ -133,11 +134,17 @@ export class GameService extends Phaser.Scene {
       fill: '#ffffff',
       padding: {x: 3, y: 3},
     }).setScrollFactor(0);
+
   }
 
   update(time: number, delta: number): void {
+    if (this.keyboard.E.isDown) {
+      interagir(this.currentMap, this.joueur, this.lastDirection);
+    }
+
     if (this.keyboard.D.isDown) {
       gestionAnims(this.keyboard, this.joueur);
+      this.lastDirection = 'right';
       this.joueur.setVelocityX(64);
       console.log(lookTileAt(this.currentMap, this.joueur, 'right'));
       this.score -= 5;
@@ -146,6 +153,7 @@ export class GameService extends Phaser.Scene {
 
     if (this.keyboard.Q.isDown) {
       gestionAnims(this.keyboard, this.joueur);
+      this.lastDirection = 'left';
       this.joueur.setVelocityX(-64);
       console.log(lookTileAt(this.currentMap, this.joueur, 'left'));
       this.score -= 5;
@@ -156,6 +164,7 @@ export class GameService extends Phaser.Scene {
     }
     if (this.keyboard.Z.isDown) {
       gestionAnims(this.keyboard, this.joueur);
+      this.lastDirection = 'up';
       this.joueur.setVelocityY(-64);
       console.log(lookTileAt(this.currentMap, this.joueur, 'up'));
       this.score -= 5;
@@ -164,6 +173,7 @@ export class GameService extends Phaser.Scene {
 
     if (this.keyboard.S.isDown) {
       this.joueur.setVelocityY(64);
+      this.lastDirection = 'down';
       gestionAnims(this.keyboard, this.joueur);
       console.log(lookTileAt(this.currentMap, this.joueur, 'down'));
       this.score -= 5;
@@ -173,13 +183,14 @@ export class GameService extends Phaser.Scene {
       this.joueur.setVelocityY(0);
     }
     if (this.score === 0) {
-      console.log('losed');
+      console.log('lost');
     }
   }
 }
 
 // @ts-ignore
 function gestionAnims(keyboard, joueur) {
+
   if (keyboard.Z.isDown && keyboard.Q.isDown || keyboard.Z.isDown && keyboard.D.isDown) {
     joueur.anims.play('up', true);
   }
@@ -202,7 +213,6 @@ function gestionAnims(keyboard, joueur) {
 
 // Functions used to get the coordinates of the player in tile unit
 // joueur: object sprite used as the player
-
 function joueurPositionX(joueur) {
   const joueurPosX: integer = Math.round((joueur.x / 16) - 1 );
   return joueurPosX;
@@ -218,19 +228,79 @@ function joueurPositionY(joueur) {
 // joueur: object sprite used as the player
 // direction: direction you wanna look
 function lookTileAt(map, joueur, direction) {
-  console.log(joueurPositionX(joueur), joueurPositionY(joueur));
   if (direction === 'up') {
-    return map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) + 1, true, 2);
+    const infoTile = map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) + 1, true, 2);
+    if(infoTile != null){
+      if (infoTile.properties.cle != null) {
+        keyInterraction(map, infoTile, joueur);
+      }
+      return infoTile;
+    }
   }
   if (direction === 'down') {
-    return map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) - 1, true, 2);
+    const infoTile = map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) - 1, true, 2);
+    if (infoTile != null){
+      if (infoTile.properties.cle != null) {
+        keyInterraction(map, infoTile, joueur);
+      }
+      return infoTile;
+    }
   }
   if (direction === 'left') {
-    return map.getTileAt(joueurPositionX(joueur) - 1, joueurPositionY(joueur), true, 2);
+    const infoTile = map.getTileAt(joueurPositionX(joueur) - 1, joueurPositionY(joueur), true, 2);
+    if (infoTile != null){
+      if (infoTile.properties.cle != null) {
+        keyInterraction(map, infoTile, joueur);
+      }
+      return infoTile;
+    }
   }
   if (direction === 'right') {
-    return map.getTileAt(joueurPositionX(joueur) + 1, joueurPositionY(joueur), true, 2);
+    const infoTile = map.getTileAt(joueurPositionX(joueur) + 1, joueurPositionY(joueur), true, 2);
+    if (infoTile != null){
+      if (infoTile.properties.cle != null) {
+        keyInterraction(map, infoTile, joueur);
+      }
+      return infoTile;
+    }
   } else {
     return null;
   }
+}
+
+function interagir(map, joueur, lastDirection) {
+  console.log(lookTileAt(map, joueur, lastDirection).properties);
+  const infoTile = lookTileAt(map, joueur, lastDirection);
+  if (infoTile.properties.interract === true) {
+    console.log('on peut interagir');
+  }
+
+}
+
+function keyInterraction(map, tile, joueur) {
+  if (tile.properties.cle === 'green') {
+    if (spoofKey()) {
+      map.removeTile(tile) ;
+    }
+  }
+  if (tile.properties.cle === 'red') {
+    console.log('clé rouge');
+  }
+  if (tile.properties.cle === 'yellow') {
+    console.log('clé jaune');
+  }
+  if (tile.properties.cle === 'blue') {
+    console.log('clé bleue');
+  }
+  if (tile.properties.cle === 'pink') {
+    console.log('clé rose');
+  }
+  if (tile.properties.cle === 'none'){
+    map.removeTile(tile) ;
+  }
+}
+
+// Function used to debug the doors
+function spoofKey() {
+  return true;
 }

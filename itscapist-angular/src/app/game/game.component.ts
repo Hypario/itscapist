@@ -20,7 +20,7 @@ export class GameComponent implements OnInit {
       type: Phaser.AUTO,
       scene: [new Load()],
       // @ts-ignore
-      pixelArt: true, // Do not touch
+      pixelArt: true,
       scale: {
         mode: Phaser.Scale.FIT,
         parent: 'gameContainer',
@@ -40,7 +40,6 @@ export class GameComponent implements OnInit {
     if (!this.phaserGame) {
       this.phaserGame = new Phaser.Game(this.config);
     }
-
     const canv = document.getElementsByTagName('canvas');
 
     this.router.events.subscribe((event) => {
@@ -51,5 +50,6 @@ export class GameComponent implements OnInit {
       }
     });
   }
+
 
 }
