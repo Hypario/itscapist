@@ -153,7 +153,7 @@ export class GameService extends Phaser.Scene {
         save_btn.setColor('#20c2ff');
       });
       save_btn.on('pointerup', () => {
-        backup(this.score, 100, 0, 0);
+        backup(this.score, 100, 0, 0, this.api);
       });
     }
   }
@@ -210,7 +210,7 @@ export class GameService extends Phaser.Scene {
 }
 
 // Function to backup current user to his/her profile
-function backup(score: number, energy: number, strength: number, intelligence: number) {
+function backup(score: number, energy: number, strength: number, intelligence: number, api: any) {
   // On envoie à l'api du serveur
   const inv = {
     score,
@@ -221,9 +221,9 @@ function backup(score: number, energy: number, strength: number, intelligence: n
   response.append('health', energy.toString());
   response.append('map_id', '0');
   response.append('inventory', JSON.stringify(inv));
-  if (this.api.isConnected()) {
+  if (api.isConnected()) {
     // tslint:disable-next-line:no-shadowed-variable
-    this.api.sendWithToken('POST', '/save', response).then((response) => {
+    api.sendWithToken('POST', '/save', response).then((response) => {
       return response.json();
     }).then((json) => {
       console.log(json);
