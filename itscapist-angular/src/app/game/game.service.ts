@@ -272,7 +272,7 @@ function joueurPositionY(joueur) {
 // direction: direction you wanna look
 function lookTileAt(map, joueur, direction) {
   if (direction === 'up') {
-    const infoTile = map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) + 1, true, 2);
+    const infoTile = map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) - 1, true, 2);
     if (infoTile != null) {
       if (infoTile.properties.cle != null) {
         keyInterraction(map, infoTile, joueur);
@@ -281,7 +281,7 @@ function lookTileAt(map, joueur, direction) {
     }
   }
   if (direction === 'down') {
-    const infoTile = map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) - 1, true, 2);
+    const infoTile = map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) + 1, true, 2);
     if (infoTile != null) {
       if (infoTile.properties.cle != null) {
         keyInterraction(map, infoTile, joueur);
