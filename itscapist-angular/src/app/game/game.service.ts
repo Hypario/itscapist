@@ -2,6 +2,8 @@ import {Injectable} from '@angular/core';
 import {Player} from './Player';
 import {GameComponent} from './game.component';
 import {CST} from './CST';
+import {ApiService} from '../api/api.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +22,7 @@ export class GameService extends Phaser.Scene {
   private strenghText;
   private lastDirection;
 
-  constructor() {
+  constructor(private api: ApiService) {
     super({key: CST.SCENES.GAME});
   }
 
@@ -135,6 +137,25 @@ export class GameService extends Phaser.Scene {
       padding: {x: 3, y: 3},
     }).setScrollFactor(0);
 
+    // Save button (appears only if user is logged)
+    if (this.api.isConnected()) {
+      // tslint:disable-next-line:variable-name
+      const save_btn = this.add.text(190, 2, 'Sauvegarder', {
+        font: '10px Arial',
+        fill: '#20c2ff',
+        padding: {x: 3, y: 3},
+      }).setScrollFactor(0);
+      save_btn.setInteractive({useHandCursor: true});
+      save_btn.on('pointerover', () => {
+        save_btn.setColor('#ff2052');
+      });
+      save_btn.on('pointerout', () => {
+        save_btn.setColor('#20c2ff');
+      });
+      save_btn.on('pointerup', () => {
+        backup(this.score, 100, 0, 0);
+      });
+    }
   }
 
   update(time: number, delta: number): void {
@@ -188,6 +209,28 @@ export class GameService extends Phaser.Scene {
   }
 }
 
+// Function to backup current user to his/her profile
+function backup(score: number, energy: number, strength: number, intelligence: number) {
+  // On envoie à l'api du serveur
+  const inv = {
+    score,
+    intell : intelligence,
+    strength
+  };
+  const response = new FormData();
+  response.append('health', energy.toString());
+  response.append('map_id', '0');
+  response.append('inventory', JSON.stringify(inv));
+  if (this.api.isConnected()) {
+    // tslint:disable-next-line:no-shadowed-variable
+    this.api.sendWithToken('POST', '/save', response).then((response) => {
+      return response.json();
+    }).then((json) => {
+      console.log(json);
+    });
+  }
+}
+
 // @ts-ignore
 function gestionAnims(keyboard, joueur) {
 
@@ -230,7 +273,7 @@ function joueurPositionY(joueur) {
 function lookTileAt(map, joueur, direction) {
   if (direction === 'up') {
     const infoTile = map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) + 1, true, 2);
-    if(infoTile != null){
+    if (infoTile != null) {
       if (infoTile.properties.cle != null) {
         keyInterraction(map, infoTile, joueur);
       }
@@ -239,7 +282,7 @@ function lookTileAt(map, joueur, direction) {
   }
   if (direction === 'down') {
     const infoTile = map.getTileAt(joueurPositionX(joueur), joueurPositionY(joueur) - 1, true, 2);
-    if (infoTile != null){
+    if (infoTile != null) {
       if (infoTile.properties.cle != null) {
         keyInterraction(map, infoTile, joueur);
       }
@@ -248,7 +291,7 @@ function lookTileAt(map, joueur, direction) {
   }
   if (direction === 'left') {
     const infoTile = map.getTileAt(joueurPositionX(joueur) - 1, joueurPositionY(joueur), true, 2);
-    if (infoTile != null){
+    if (infoTile != null) {
       if (infoTile.properties.cle != null) {
         keyInterraction(map, infoTile, joueur);
       }
@@ -257,7 +300,7 @@ function lookTileAt(map, joueur, direction) {
   }
   if (direction === 'right') {
     const infoTile = map.getTileAt(joueurPositionX(joueur) + 1, joueurPositionY(joueur), true, 2);
-    if (infoTile != null){
+    if (infoTile != null) {
       if (infoTile.properties.cle != null) {
         keyInterraction(map, infoTile, joueur);
       }
@@ -295,7 +338,7 @@ function keyInterraction(map, tile, joueur) {
   if (tile.properties.cle === 'pink') {
     console.log('clé rose');
   }
-  if (tile.properties.cle === 'none'){
+  if (tile.properties.cle === 'none') {
     map.removeTile(tile) ;
   }
 }

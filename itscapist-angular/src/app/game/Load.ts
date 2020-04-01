@@ -1,8 +1,9 @@
 import {CST} from './CST';
 import {Menu} from './Menu';
+import { ApiService } from '../api/api.service';
 
 export class Load extends Phaser.Scene {
-  constructor() {
+  constructor(private api: ApiService) {
     super({
       key: CST.SCENES.LOAD
     });
@@ -26,7 +27,7 @@ export class Load extends Phaser.Scene {
   }
 
   create() {
-    this.scene.add(CST.SCENES.MENU, Menu, true);
+    this.scene.add(CST.SCENES.MENU, new Menu(this.api), true);
     // this.scene.start(CST.SCENES.MENU);
   }
 }

@@ -1,11 +1,22 @@
 <div fxLayoutAlign="center center">
   <mat-card fxFlex="50">
-    <mat-card-content fxLayout="column" fxLayoutAlign="center">
+    <mat-card-content fxLayout="column" fxLayoutAlign="center" *ngIf="apiResponse != undefined">
       <h3>Profil de {{ apiResponse.name }}</h3>
-      <p> Votre temps de jeu : <b>{{ userdata.temps }}</b><br>
-        Salle actuelle : <b>{{ userdata.salle }}</b><br>
-        Nombre de points : <b>{{ userdata.points }}</b>
+      <div *ngIf = "save_response != undefined">
+      <p> Votre temps de jeu : <b>undefined</b><br>
+        Salle actuelle : <b>{{ save_response.map_id }}</b><br>
+        Énergie : <b>{{ save_response.health }}</b><br>
+        Score : <b>{{ userdata.score }}</b><br>
+        Intelligence : <b>{{ userdata.intell }}</b><br>
+        Force : <b>{{ userdata.strength }}</b>
+        <!--Inventaire : <b>{{ save_response.inventory }}</b><br>-->
       </p>
+      <button mat-raised-button color="warn" (click)=delsave() title="Attention ! Vous devez être sûr de ce que vous faisez !">Supprimer ma sauvegarde</button>
+      <br>
+      </div>
+      <div *ngIf="save_response == undefined">
+        <p><b>Vous n'avez pas encore joué au jeu ou sauvegardé votre partie !</b></p>
+      </div>
       <button mat-raised-button color="accent" (click)=togglePasswd()>Changer votre mot de passe</button>
       
       <div [hidden]="isShown">
@@ -44,7 +55,6 @@
       <p>
         Date d'inscription : <b> {{ apiResponse.created_at }}</b>
       </p>
-      <h3>D'autres informations seront prochainement disponibles ici aussi 😉</h3>
       <button mat-stroked-button color="warn" (click) = "logout()">Se déconnecter</button>
     </mat-card-content>
   </mat-card>

@@ -19,12 +19,12 @@ export class ProfileComponent implements OnInit {
     created_at: string
   };
 
+  save_response = undefined;
+
   userdata = {
-    username: 'undefined',
-    temps: 'undefined',
-    salle: 0,
-    points: 0,
-    register_date: 'undefined'
+    score: 0,
+    intell: 0,
+    strength: 0,
   };
 
   isShown = true;
@@ -81,15 +81,33 @@ export class ProfileComponent implements OnInit {
 
 
   getProfile(): void {
+    console.warn("current token : "+this.api.jwt.token);
     this.api.getUser().then((json) => {
       if (!json.success) {
         this.apiResponse = json;
+      }
+    });
+    this.api.sendWithToken('GET','/save',undefined).then((response) => {
+      return response.json();
+    }).then((json) => {
+      if (json.save != undefined) {
+      this.save_response = JSON.parse(json.save);
+      this.userdata = JSON.parse(this.save_response.inventory);
       }
     });
   }
 
   logout(): void {
     this.api.logout();
+    this.router.navigateByUrl("/");
+  }
+
+  delsave(): void {
+    this.api.sendWithToken("DELETE","/save",undefined).then((response)=> {
+      return response.json();
+    }).then((json) => {
+      console.warn("État de la suppression : "+json.message);
+    });
     this.router.navigateByUrl("/");
   }
 
